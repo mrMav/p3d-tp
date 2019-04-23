@@ -71,47 +71,47 @@ int main(void) {
 	glViewport(0, 0, screenWidth, screenHeight);
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	//glfwSetCursorPosCallback(window, mouse_callback);
+	//glfwSetCursorPosCallback(window, mouse_callback);   // TODO: add navigation
 	//glfwSetScrollCallback(window, scroll_callback);
 	
 	/* Define a cube geometry and colors */	
 	float vertices[] = {
 		// positions          // rgb colors
 		// front face         
-		-0.5f,  0.5f,  0.5f,  1.0f,  0.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f,  0.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,  1.0f,  0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.6f, 0.1f, 0.2f,
+		 0.5f,  0.5f,  0.5f,  0.6f, 0.1f, 0.2f,
+		 0.5f, -0.5f,  0.5f,  0.6f, 0.1f, 0.2f,
+		-0.5f, -0.5f,  0.5f,  0.6f, 0.1f, 0.2f,
 		
 		 // back face
-		 0.5f,  0.5f, -0.5f,  0.0f,  1.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f,  1.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  0.1f, 0.6f, 0.2f,
+		-0.5f,  0.5f, -0.5f,  0.1f, 0.6f, 0.2f,
+		-0.5f, -0.5f, -0.5f,  0.1f, 0.6f, 0.2f,
+		 0.5f, -0.5f, -0.5f,  0.1f, 0.6f, 0.2f,
 
 		// left face
-		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f,  1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f,  1.0f,
+		-0.5f,  0.5f, -0.5f,  0.2f, 0.1f, 0.6f,
+		-0.5f,  0.5f,  0.5f,  0.2f, 0.1f, 0.6f,
+		-0.5f, -0.5f,  0.5f,  0.2f, 0.1f, 0.6f,
+		-0.5f, -0.5f, -0.5f,  0.2f, 0.1f, 0.6f,
 
 		// right face
-		 0.5f,  0.5f,  0.5f,  1.0f,  1.0f,  0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f,  1.0f,  0.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f,  1.0f,  0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f,  1.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,  0.6f, 0.6f, 0.2f,
+		 0.5f,  0.5f, -0.5f,  0.6f, 0.6f, 0.2f,
+		 0.5f, -0.5f, -0.5f,  0.6f, 0.6f, 0.2f,
+		 0.5f, -0.5f,  0.5f,  0.6f, 0.6f, 0.2f,
 
 		// top face
-		-0.5f,  0.5f, -0.5f,  1.0f,  1.0f,  1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f,  1.0f,  1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f,  1.0f,  1.0f,
-		-0.5f,  0.5f,  0.5f,  1.0f,  1.0f,  1.0f,
+		-0.5f,  0.5f, -0.5f,  0.6f, 0.5f, 0.4f,
+		 0.5f,  0.5f, -0.5f,  0.6f, 0.5f, 0.4f,
+		 0.5f,  0.5f,  0.5f,  0.6f, 0.5f, 0.4f,
+		-0.5f,  0.5f,  0.5f,  0.6f, 0.5f, 0.4f,
 
 		// bottom face
-		-0.5f, -0.5f, -0.5f,  0.5f,  0.5f,  1.0f,
-		 0.5f, -0.5f, -0.5f,  0.5f,  0.5f,  1.0f,
-		 0.5f, -0.5f,  0.5f,  0.5f,  0.5f,  1.0f,
-		-0.5f, -0.5f,  0.5f,  0.5f,  0.5f,  1.0f
+		-0.5f, -0.5f,  0.5f,  0.5f,  0.5f,  0.1f,
+		 0.5f, -0.5f,  0.5f,  0.5f,  0.5f,  0.1f,
+		 0.5f, -0.5f, -0.5f,  0.5f,  0.5f,  0.1f,
+		-0.5f, -0.5f, -0.5f,  0.5f,  0.5f,  0.1f,
 	
 	};
 
@@ -134,12 +134,12 @@ int main(void) {
 		13, 14, 15,
 
 		// top face
-		16, 17, 19,  // TODO: fix winding
-		17, 18, 19,  // TODO: fix winding
+		16, 17, 19, 
+		17, 18, 19,  
 
 		// bottom face
-		20, 21, 23,  // TODO: fix winding
-		21, 22, 23  // TODO: fix winding
+		20, 21, 23,  
+		21, 22, 23  
 
 	};
 
@@ -161,7 +161,7 @@ int main(void) {
 	// set the locations for the shaders data:	
 	// vertex position
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, nullptr);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)0);
 
 	//vertex color
 	glEnableVertexAttribArray(1);
@@ -186,14 +186,15 @@ int main(void) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		shader.use();
-		model = glm::rotate(model, glm::radians(deltaTime * 50), glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(deltaTime * 50), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(deltaTime * 20), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(deltaTime * 20), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(deltaTime * 20), glm::vec3(0.0f, 0.0f, 1.0f));
 		shader.setMat4("model", model);
 		shader.setMat4("view", view);
 		shader.setMat4("projection", projection);
 		
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 		
 		glfwSwapBuffers(window);
