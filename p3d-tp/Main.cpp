@@ -13,6 +13,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Shader.h"
+#include "VertexPositionNormalTexture.h"
 
 void error_callback(int error, const char* description);
 
@@ -36,6 +37,10 @@ int main(void) {
 	GLFWwindow* window;
 
 	glfwSetErrorCallback(error_callback);
+
+	VertexPositionNormalTexture p { glm::vec3(1.0, 2.0, 3.0), glm::vec3(0.0, 1.0, 0.0), glm::vec2(1.0, 0.5) };
+
+	std::cout << p.GetString() << std::endl << std::endl;
 
 	if (!glfwInit()) {
 		
