@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/string_cast.hpp>
+//#include <glm/gtx/string_cast.hpp>
 
 struct VertexPositionNormalTexture {
 
@@ -22,24 +22,24 @@ public:
 		this->texture = tex;
 	}
 
-	std::string GetString();
+	//std::string GetString();
 
 };
-
-std::string VertexPositionNormalTexture::GetString() {
-	
-	std::string s;
-
-	s.append("P: ");
-	s.append(glm::to_string(this->position));
-	
-	s.append(" N: ");
-	s.append(glm::to_string(this->normal));
-
-
-	s.append(" T: ");
-	s.append(glm::to_string(this->texture));
-
-	return s;
-
-}
+//
+//std::string VertexPositionNormalTexture::GetString() {
+//	
+//	std::string s;
+//
+//	s.append("P: ");
+//	s.append(glm::to_string(this->position));
+//	
+//	s.append(" N: ");
+//	s.append(glm::to_string(this->normal));
+//
+//
+//	s.append(" T: ");
+//	s.append(glm::to_string(this->texture));
+//
+//	return s;
+//
+//}

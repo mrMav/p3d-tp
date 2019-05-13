@@ -12,6 +12,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "VertexBuffer.h"
 #include "Shader.h"
 #include "VertexPositionNormalTexture.h"
 
@@ -40,7 +41,7 @@ int main(void) {
 
 	VertexPositionNormalTexture p { glm::vec3(1.0, 2.0, 3.0), glm::vec3(0.0, 1.0, 0.0), glm::vec2(1.0, 0.5) };
 
-	std::cout << p.GetString() << std::endl << std::endl;
+	//std::cout << p.GetString() << std::endl << std::endl;
 
 	if (!glfwInit()) {
 		
@@ -157,6 +158,9 @@ int main(void) {
 	glGenBuffers(1, &EBO);
 
 	glBindVertexArray(VAO);
+
+	VertexBuffer vb{ vertices, sizeof(vertices) };
+
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
