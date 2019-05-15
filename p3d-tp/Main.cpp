@@ -12,7 +12,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Mesh.h"
 #include "VertexBuffer.h"
+#include "IndexBuffer.h"
 #include "Shader.h"
 #include "VertexPositionNormalTexture.h"
 
@@ -151,6 +153,10 @@ int main(void) {
 
 	Shader shader("Color.vert", "Color.frag");
 	
+	VertexBuffer cubeVertexBuffer { vertices, sizeof(vertices) };
+	IndexBuffer cubeIndexBuffer{ indices, sizeof(indices) };
+	Mesh cubeMesh{ &cubeVertexBuffer, &cubeIndexBuffer };
+	
 	// create VAO, VBO and an EBO
 	GLuint VAO, VBO, EBO;
 	glGenVertexArrays(1, &VAO);
@@ -158,9 +164,7 @@ int main(void) {
 	glGenBuffers(1, &EBO);
 
 	glBindVertexArray(VAO);
-
-	VertexBuffer vb{ vertices, sizeof(vertices) };
-
+	
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 

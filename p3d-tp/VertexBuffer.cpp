@@ -7,7 +7,7 @@ VertexBuffer::VertexBuffer(const void* data, unsigned int size)
 	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 	GLUtils::CheckErrors();
 	glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
-	GLUtils::CheckErrors();	
+	GLUtils::CheckErrors();
 }
 
 VertexBuffer::~VertexBuffer()
