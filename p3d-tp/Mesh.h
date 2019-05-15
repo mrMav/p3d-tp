@@ -19,7 +19,7 @@ private:
 
 public:
 	
-	Mesh(VertexBuffer* vbo, IndexBuffer* ebo);
+	Mesh(VertexPositionNormalTexture* vertices, int vertexCount, int* indices, int indicesCount);
 	~Mesh();
 
 };
