@@ -1,5 +1,7 @@
 #include <GL/glew.h>
 
+#include <iostream>
+
 #include "GLUtils.h"
 
 void GLUtils::CheckErrors()
@@ -11,7 +13,7 @@ void GLUtils::CheckErrors()
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
 		//errstring = gluErrorString(err);
-		printf("GL ERROR:%d %s", err /*, errstring */);
+		std::cout << "GL ERROR: "<< err << /* errstring << */ std::endl;
 	}
 
 }

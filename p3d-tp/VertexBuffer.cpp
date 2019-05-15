@@ -13,7 +13,7 @@ VertexBuffer::VertexBuffer(const void* data, unsigned int size)
 VertexBuffer::~VertexBuffer()
 {
 	glDeleteBuffers(1, &m_vbo);
-	GLUtils::CheckErrors();
+	//GLUtils::CheckErrors();
 }
 
 void VertexBuffer::Bind()
