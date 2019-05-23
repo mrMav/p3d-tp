@@ -32,6 +32,8 @@ Mesh::Mesh(std::vector<VertexPositionNormalTexture> vertices, std::vector<int> i
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (void*)(6 * sizeof(float)));
 	
+	GLUtils::CheckErrors();
+
 	model = glm::mat4(1.0f);
 }
 
