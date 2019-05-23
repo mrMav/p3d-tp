@@ -11,11 +11,18 @@ VertexBuffer::VertexBuffer(std::vector<VertexPositionNormalTexture> data)
 	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 	GLUtils::CheckErrors();
 
-	// build an interleaved array, with the received data
-	size_t size = data.size() * 8;  // a vertexPositioNormalTexture has 8 floats
-	// init data array
-	m_data = (float*)malloc(size * sizeof(float));
+	/* build an interleaved array, with the received data */
+	/* i think we could just use a pointer to the begining of the std::vector */
 
+	// define the element count
+	m_dataCount = data.size() * 8;  // a vertexPositioNormalTexture has 8 floats
+	
+	// calculate size of buffer in bytes
+	size_t size = m_dataCount * sizeof(float);
+
+	// init data array
+	m_data = (float*)malloc(size);
+	
 	// populate
 	for (int i = 0; i < data.size(); i++) {
 		
@@ -31,16 +38,24 @@ VertexBuffer::VertexBuffer(std::vector<VertexPositionNormalTexture> data)
 				 
 		m_data[6 + offset] = data[i].texture.x;
 		m_data[7 + offset] = data[i].texture.y;
+		
 	}
-
+	
 	glBufferData(GL_ARRAY_BUFFER, size, m_data, GL_STATIC_DRAW);
 	GLUtils::CheckErrors();
+
+	// after this, we can free the used data like this:
+	// free(m_data);
+
 }
 
 VertexBuffer::~VertexBuffer()
 {
 	glDeleteBuffers(1, &m_vbo);
 	//GLUtils::CheckErrors();
+
+	free(m_data);
+
 }
 
 void VertexBuffer::Bind()

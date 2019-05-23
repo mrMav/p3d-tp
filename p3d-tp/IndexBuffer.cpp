@@ -1,12 +1,18 @@
+#include <stdio.h>
+#include <vector>
+
 #include "IndexBuffer.h"
 
-IndexBuffer::IndexBuffer(const void* data, unsigned int size)
+IndexBuffer::IndexBuffer(std::vector<int> data)
 {
 	glGenBuffers(1, &m_ebo);
 	GLUtils::CheckErrors();
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
 	GLUtils::CheckErrors();
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+	
+	m_data = data;
+
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_data.size() * sizeof(int), &m_data[0], GL_STATIC_DRAW);
 	GLUtils::CheckErrors();
 }
 

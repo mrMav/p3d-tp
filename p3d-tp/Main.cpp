@@ -182,36 +182,27 @@ int main(void) {
 
 	//// create the matrices for positioning and projection
 	//glm::mat4 model = glm::mat4(1.0f);  // make an identity matrix
-	//glm::mat4 view  = glm::mat4(1.0f);
-	//view = glm::translate(view, glm::vec3(0, 0, -3.0f));  // translates the camera back
-	//glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f); // creates a perspective projection matrix
+	
+	glm::mat4 view  = glm::mat4(1.0f);
+	view = glm::translate(view, glm::vec3(0, 0, -3.0f));  // translates the camera back
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f); // creates a perspective projection matrix
 	//
-	//while (!glfwWindowShouldClose(window)) {
+	while (!glfwWindowShouldClose(window)) {
 
-	//	process_input(window);
+		process_input(window);
 
-	//	float currentFrame = glfwGetTime();
-	//	deltaTime = currentFrame - lastFrame;
-	//	lastFrame = currentFrame;
-	//	
-	//	glClearColor(0.1, 0.1, 0.1, 1.0);
-	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//	
-	//	shader.use();
-	//	model = glm::rotate(model, glm::radians(deltaTime * 20), glm::vec3(0.0f, 1.0f, 0.0f));
-	//	model = glm::rotate(model, glm::radians(deltaTime * 20), glm::vec3(1.0f, 0.0f, 0.0f));
-	//	model = glm::rotate(model, glm::radians(deltaTime * 20), glm::vec3(0.0f, 0.0f, 1.0f));
-	//	shader.setMat4("model", model);
-	//	shader.setMat4("view", view);
-	//	shader.setMat4("projection", projection);
-	//	
-	//	glBindVertexArray(VAO);
-	//	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-	//	glBindVertexArray(0);
-	//	
-	//	glfwSwapBuffers(window);
-	//	glfwPollEvents();
-	//}
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+		
+		glClearColor(0.1, 0.1, 0.1, 1.0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+		cubeMesh.Draw(view, projection, &shader, deltaTime);
+		
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
 	
 	glfwDestroyWindow(window);
 

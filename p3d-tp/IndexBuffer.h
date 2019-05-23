@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GL/glew.h>
+#include <vector>
 
 #include "GLUtils.h"
 
@@ -11,14 +12,15 @@ private:
 
 	GLuint m_ebo;
 
+	std::vector<int> m_data;
+
 public:
 
-	IndexBuffer(const void* data, unsigned int size);
+	IndexBuffer(std::vector<int> data);
 	~IndexBuffer();
 
 	void Bind();
 
 	void Unbind();
-
 
 };

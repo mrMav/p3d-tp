@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <vector>
 
-#include "Mesh.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
+#include "Mesh.h"
+#include "Shader.h"
 
 // for now, we will assume that every mesh uses VertexPositionNormalTexture as the vertex data type
 Mesh::Mesh(std::vector<VertexPositionNormalTexture> vertices, std::vector<int> indices)
@@ -13,7 +17,7 @@ Mesh::Mesh(std::vector<VertexPositionNormalTexture> vertices, std::vector<int> i
 	glBindVertexArray(m_vao);
 
 	m_vertexBuffer = new VertexBuffer(vertices);
-	//m_indexBuffer = new IndexBuffer(indices, indicesCount);
+	m_indexBuffer = new IndexBuffer(indices);
 	   
 	// set the locations for the shaders data:	
 	// vertex position
@@ -28,9 +32,28 @@ Mesh::Mesh(std::vector<VertexPositionNormalTexture> vertices, std::vector<int> i
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (void*)(6 * sizeof(float)));
 	
+	model = glm::mat4(1.0f);
 }
 
 Mesh::~Mesh()
 {
 	
+}
+
+void Mesh::Draw(glm::mat4 &view, glm::mat4 &projection, Shader *shader, float deltaTime)
+{
+	
+	shader->use();
+	
+	/*model = glm::rotate(model, glm::radians(deltaTime * 20), glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(deltaTime * 20), glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(deltaTime * 20), glm::vec3(0.0f, 0.0f, 1.0f));
+*/
+	shader->setMat4("model", model);
+	shader->setMat4("view", view);
+	shader->setMat4("projection", projection);
+	
+	m_vertexBuffer->Bind();
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
 }
