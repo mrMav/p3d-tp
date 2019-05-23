@@ -19,7 +19,7 @@ private:
 
 public:
 	
-	Mesh(VertexPositionNormalTexture* vertices, int vertexCount, int* indices, int indicesCount);
+	Mesh(std::vector<VertexPositionNormalTexture> vertices, std::vector<int> indices);
 	~Mesh();
 
 };

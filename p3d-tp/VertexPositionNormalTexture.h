@@ -22,6 +22,13 @@ public:
 		this->texture = tex;
 	}
 
+	VertexPositionNormalTexture(float x, float y, float z, float nx, float ny, float nz, float u, float v)
+	{
+		this->position = glm::vec3(x, y, z);
+		this->normal = glm::vec3(nx, ny, nz);
+		this->texture = glm::vec2(u, v);
+	}
+
 	std::string GetString() {
 
 		std::string s;
@@ -31,8 +38,7 @@ public:
 
 		s.append(" N: ");
 		s.append(glm::to_string(this->normal));
-
-
+		
 		s.append(" T: ");
 		s.append(glm::to_string(this->texture));
 

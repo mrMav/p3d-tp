@@ -83,47 +83,48 @@ int main(void) {
 	//glfwSetScrollCallback(window, scroll_callback);
 	
 	/* Define a cube geometry and colors */	
-	float vertices[] = {
+	std::vector<VertexPositionNormalTexture> vertices = {
+
 		// positions          // rgb colors
 		// front face         
-		-0.5f,  0.5f,  0.5f,  0.6f, 0.1f, 0.2f,
-		 0.5f,  0.5f,  0.5f,  0.6f, 0.1f, 0.2f,
-		 0.5f, -0.5f,  0.5f,  0.6f, 0.1f, 0.2f,
-		-0.5f, -0.5f,  0.5f,  0.6f, 0.1f, 0.2f,
+		VertexPositionNormalTexture{-0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f},
+		VertexPositionNormalTexture{ 0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f},
+		VertexPositionNormalTexture{ 0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f},
+		VertexPositionNormalTexture{-0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f},
 		
 		 // back face
-		 0.5f,  0.5f, -0.5f,  0.1f, 0.6f, 0.2f,
-		-0.5f,  0.5f, -0.5f,  0.1f, 0.6f, 0.2f,
-		-0.5f, -0.5f, -0.5f,  0.1f, 0.6f, 0.2f,
-		 0.5f, -0.5f, -0.5f,  0.1f, 0.6f, 0.2f,
+		VertexPositionNormalTexture{ 0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 0.0f, 0.0f},
+		VertexPositionNormalTexture{-0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 1.0f, 0.0f},
+		VertexPositionNormalTexture{-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 1.0f, 1.0f},
+		VertexPositionNormalTexture{ 0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 0.0f, 1.0f},
 
 		// left face
-		-0.5f,  0.5f, -0.5f,  0.2f, 0.1f, 0.6f,
-		-0.5f,  0.5f,  0.5f,  0.2f, 0.1f, 0.6f,
-		-0.5f, -0.5f,  0.5f,  0.2f, 0.1f, 0.6f,
-		-0.5f, -0.5f, -0.5f,  0.2f, 0.1f, 0.6f,
+		VertexPositionNormalTexture{-0.5f,  0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f},
+		VertexPositionNormalTexture{-0.5f,  0.5f,  0.5f, -1.0f, 0.0f, 0.0f,	1.0f, 0.0f},
+		VertexPositionNormalTexture{-0.5f, -0.5f,  0.5f, -1.0f, 0.0f, 0.0f,	1.0f, 1.0f},
+		VertexPositionNormalTexture{-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,	0.0f, 1.0f},
 
 		// right face
-		 0.5f,  0.5f,  0.5f,  0.6f, 0.6f, 0.2f,
-		 0.5f,  0.5f, -0.5f,  0.6f, 0.6f, 0.2f,
-		 0.5f, -0.5f, -0.5f,  0.6f, 0.6f, 0.2f,
-		 0.5f, -0.5f,  0.5f,  0.6f, 0.6f, 0.2f,
+		VertexPositionNormalTexture{ 0.5f,  0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f},
+		VertexPositionNormalTexture{ 0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f},
+		VertexPositionNormalTexture{ 0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f},
+		VertexPositionNormalTexture{ 0.5f, -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f},
 
 		// top face
-		-0.5f,  0.5f, -0.5f,  0.6f, 0.5f, 0.4f,
-		 0.5f,  0.5f, -0.5f,  0.6f, 0.5f, 0.4f,
-		 0.5f,  0.5f,  0.5f,  0.6f, 0.5f, 0.4f,
-		-0.5f,  0.5f,  0.5f,  0.6f, 0.5f, 0.4f,
+		VertexPositionNormalTexture{-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 0.0f},
+		VertexPositionNormalTexture{ 0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 0.0f},
+		VertexPositionNormalTexture{ 0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 1.0f},
+		VertexPositionNormalTexture{-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f},
 
 		// bottom face
-		-0.5f, -0.5f,  0.5f,  0.5f,  0.5f,  0.1f,
-		 0.5f, -0.5f,  0.5f,  0.5f,  0.5f,  0.1f,
-		 0.5f, -0.5f, -0.5f,  0.5f,  0.5f,  0.1f,
-		-0.5f, -0.5f, -0.5f,  0.5f,  0.5f,  0.1f,
+		VertexPositionNormalTexture{-0.5f, -0.5f,  0.5f,  0.0f, -1.0f, 0.0f, 0.0f, 0.0f},
+		VertexPositionNormalTexture{ 0.5f, -0.5f,  0.5f,  0.0f, -1.0f, 0.0f, 1.0f, 0.0f},
+		VertexPositionNormalTexture{ 0.5f, -0.5f, -0.5f,  0.0f, -1.0f, 0.0f, 1.0f, 1.0f},
+		VertexPositionNormalTexture{-0.5f, -0.5f, -0.5f,  0.0f, -1.0f, 0.0f, 0.0f, 1.0f},
 	
 	};
 
-	int indices[] = {
+	std::vector<int> indices = {
 
 		// front face
 		0, 1, 3,
@@ -153,66 +154,64 @@ int main(void) {
 
 	Shader shader("Color.vert", "Color.frag");
 	
-	VertexBuffer cubeVertexBuffer { vertices, sizeof(vertices) };
-	IndexBuffer cubeIndexBuffer{ indices, sizeof(indices) };
-	Mesh cubeMesh{ &cubeVertexBuffer, &cubeIndexBuffer };
+	Mesh cubeMesh { vertices, indices };
 	
 	// create VAO, VBO and an EBO
-	GLuint VAO, VBO, EBO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
+	//GLuint VAO, VBO, EBO;
+	//glGenVertexArrays(1, &VAO);
+	//glGenBuffers(1, &VBO);
+	//glGenBuffers(1, &EBO);
 
-	glBindVertexArray(VAO);
-	
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	//glBindVertexArray(VAO);
+	//
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	
-	// set the locations for the shaders data:	
-	// vertex position
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)0);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	//
+	//// set the locations for the shaders data:	
+	//// vertex position
+	//glEnableVertexAttribArray(0);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)0);
 
-	//vertex color
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)(3 * sizeof(float)));
-	
+	////vertex color
+	//glEnableVertexAttribArray(1);
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)(3 * sizeof(float)));
+	//
 
-	// create the matrices for positioning and projection
-	glm::mat4 model = glm::mat4(1.0f);  // make an identity matrix
-	glm::mat4 view  = glm::mat4(1.0f);
-	view = glm::translate(view, glm::vec3(0, 0, -3.0f));  // translates the camera back
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f); // creates a perspective projection matrix
-	
-	while (!glfwWindowShouldClose(window)) {
+	//// create the matrices for positioning and projection
+	//glm::mat4 model = glm::mat4(1.0f);  // make an identity matrix
+	//glm::mat4 view  = glm::mat4(1.0f);
+	//view = glm::translate(view, glm::vec3(0, 0, -3.0f));  // translates the camera back
+	//glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f); // creates a perspective projection matrix
+	//
+	//while (!glfwWindowShouldClose(window)) {
 
-		process_input(window);
+	//	process_input(window);
 
-		float currentFrame = glfwGetTime();
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
-		
-		glClearColor(0.1, 0.1, 0.1, 1.0);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
-		shader.use();
-		model = glm::rotate(model, glm::radians(deltaTime * 20), glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(deltaTime * 20), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(deltaTime * 20), glm::vec3(0.0f, 0.0f, 1.0f));
-		shader.setMat4("model", model);
-		shader.setMat4("view", view);
-		shader.setMat4("projection", projection);
-		
-		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
-		
-		glfwSwapBuffers(window);
-		glfwPollEvents();
-	}
+	//	float currentFrame = glfwGetTime();
+	//	deltaTime = currentFrame - lastFrame;
+	//	lastFrame = currentFrame;
+	//	
+	//	glClearColor(0.1, 0.1, 0.1, 1.0);
+	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//	
+	//	shader.use();
+	//	model = glm::rotate(model, glm::radians(deltaTime * 20), glm::vec3(0.0f, 1.0f, 0.0f));
+	//	model = glm::rotate(model, glm::radians(deltaTime * 20), glm::vec3(1.0f, 0.0f, 0.0f));
+	//	model = glm::rotate(model, glm::radians(deltaTime * 20), glm::vec3(0.0f, 0.0f, 1.0f));
+	//	shader.setMat4("model", model);
+	//	shader.setMat4("view", view);
+	//	shader.setMat4("projection", projection);
+	//	
+	//	glBindVertexArray(VAO);
+	//	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+	//	glBindVertexArray(0);
+	//	
+	//	glfwSwapBuffers(window);
+	//	glfwPollEvents();
+	//}
 	
 	glfwDestroyWindow(window);
 
