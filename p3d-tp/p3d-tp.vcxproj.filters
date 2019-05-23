@@ -41,6 +41,12 @@
     <None Include="Color.frag">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Texture.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Texture.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">

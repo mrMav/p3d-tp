@@ -2,10 +2,12 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 
 #include <GL/glew.h>
 
 #include "stb_image.h"
+
 #include "GLUtils.h"
 
 
@@ -21,7 +23,9 @@ public:
 
 		stbi_set_flip_vertically_on_load(true);
 
-		unsigned char* data = stbi_load(filename, &width, &height, &channels, 0);
+		std::string path = "/" + std::string(filename);
+
+		unsigned char* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 
 		if (data) {
 
@@ -33,7 +37,7 @@ public:
 		}
 		else {
 
-			std::cout << "ERROR::TEXTURE2D::FAILED TO LOAD TEXTURE\n" << std::endl;
+			std::cout << "ERROR::TEXTURE2D::FAILED TO LOAD TEXTURE:: " << path << std::endl;
 
 		}
 

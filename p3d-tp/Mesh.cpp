@@ -46,11 +46,6 @@ void Mesh::Draw(glm::mat4 &view, glm::mat4 &projection, Shader *shader, float de
 {
 	
 	shader->use();
-	
-	/*model = glm::rotate(model, glm::radians(deltaTime * 20), glm::vec3(0.0f, 1.0f, 0.0f));
-	model = glm::rotate(model, glm::radians(deltaTime * 20), glm::vec3(1.0f, 0.0f, 0.0f));
-	model = glm::rotate(model, glm::radians(deltaTime * 20), glm::vec3(0.0f, 0.0f, 1.0f));
-*/
 	shader->setMat4("model", model);
 	shader->setMat4("view", view);
 	shader->setMat4("projection", projection);

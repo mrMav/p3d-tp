@@ -12,6 +12,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Texture2D.h"
 #include "Mesh.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
@@ -152,10 +153,9 @@ int main(void) {
 
 	};
 
-	Shader shader("Color.vert", "Color.frag");
-	
+	Shader shader("Texture.vert", "Texture.frag");
+	Texture2D woodBoxTexture("box-wood.png", GL_RGBA);
 	Mesh cubeMesh { vertices, indices };
-	
 	
 	glm::mat4 view  = glm::mat4(1.0f);
 	view = glm::translate(view, glm::vec3(0, 0, -3.0f));  // translates the camera back
@@ -172,6 +172,11 @@ int main(void) {
 		glClearColor(0.1, 0.1, 0.1, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
+
+		cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 20), glm::vec3(0.0f, 1.0f, 0.0f));
+		cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 20), glm::vec3(1.0f, 0.0f, 0.0f));
+		cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 20), glm::vec3(0.0f, 0.0f, 1.0f));
+
 		cubeMesh.Draw(view, projection, &shader, deltaTime);
 		
 		glfwSwapBuffers(window);
