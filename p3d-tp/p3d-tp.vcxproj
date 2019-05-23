@@ -119,6 +119,7 @@
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +131,7 @@
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexPositionNormalTexture.h" />
   </ItemGroup>
