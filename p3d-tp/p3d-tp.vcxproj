@@ -119,6 +119,7 @@
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="OrbitCamera.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
   </ItemGroup>
@@ -132,11 +133,13 @@
     <ClInclude Include="GLUtils.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="OrbitCamera.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexPositionNormalTexture.h" />
+    <ClInclude Include="Viewport.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
