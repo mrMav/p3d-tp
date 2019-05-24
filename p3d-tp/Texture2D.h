@@ -22,22 +22,22 @@ public:
 	Texture2D(const char* filename, GLint format) {
 
 		stbi_set_flip_vertically_on_load(true);
-
-		std::string path = "/" + std::string(filename);
-
-		unsigned char* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		
+		unsigned char* data = stbi_load(filename, &width, &height, &channels, 0);
 
 		if (data) {
 
+			glActiveTexture(GL_TEXTURE0);
+
 			glGenTextures(1, &textureID);
 			glBindTexture(GL_TEXTURE_2D, textureID);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, channels == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data);
 			glGenerateMipmap(GL_TEXTURE_2D);
-
+			
 		}
 		else {
 
-			std::cout << "ERROR::TEXTURE2D::FAILED TO LOAD TEXTURE:: " << path << std::endl;
+			std::cout << "ERROR::TEXTURE2D::FAILED TO LOAD TEXTURE" << std::endl;
 
 		}
 
