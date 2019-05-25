@@ -180,9 +180,9 @@ int main(void) {
 		
 		camera.Update(deltaTime);
 
-		/*cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 20), glm::vec3(0.0f, 1.0f, 0.0f));
-		cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 20), glm::vec3(1.0f, 0.0f, 0.0f));
-		cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 20), glm::vec3(0.0f, 0.0f, 1.0f));*/
+		//cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(0.0f, 1.0f, 0.0f));
+		//cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(1.0f, 0.0f, 0.0f));
+		//cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 		cubeMesh.Draw(camera.view_transform, camera.projection_transform, &shader, deltaTime);
 		
