@@ -53,11 +53,13 @@ int main(void) {
 
 	objl::Loader loader;
 
-	bool sucess = loader.LoadFile("Iron_Man/Iron_Man.obj");
+	bool sucess;
+	//sucess = loader.LoadFile("Iron_Man/Iron_Man.obj");
 
 	if (sucess) {
 
-		printf("Loaded?\n");
+		// if sucess, we can now build our own meshes with 
+		// loader.LoadedMeshes
 
 	}
 	else {
