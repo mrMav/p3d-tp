@@ -12,6 +12,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#define OBJL_CONSOLE_OUTPUT
+#include "OBJ_Loader.h"
+
 #include "Texture2D.h"
 #include "Mesh.h"
 #include "VertexBuffer.h"
@@ -47,6 +50,22 @@ OrbitCamera camera = OrbitCamera(&viewport, glm::vec3(0), 5.0f, 45.0f);
 
 int main(void) {
 	
+
+	objl::Loader loader;
+
+	bool sucess = loader.LoadFile("Iron_Man/Iron_Man.obj");
+
+	if (sucess) {
+
+		printf("Loaded?\n");
+
+	}
+	else {
+
+		printf("Loading error\n");
+
+	}
+
 	GLFWwindow* window;
 
 	glfwSetErrorCallback(error_callback);
