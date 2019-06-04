@@ -12,15 +12,19 @@ private:
 
 	GLuint m_ebo;
 
-	std::vector<int> m_data;
+	std::vector<unsigned int> m_data;
+
+	int m_dataCount;
 
 public:
 
-	IndexBuffer(std::vector<int> data);
+	IndexBuffer(std::vector<unsigned int> data);
 	~IndexBuffer();
 
 	void Bind();
 
 	void Unbind();
+
+	int GetDataCount() { return m_dataCount; };
 
 };

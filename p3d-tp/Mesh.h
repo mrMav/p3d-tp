@@ -17,14 +17,17 @@ private:
 	VertexBuffer* m_vertexBuffer;
 	IndexBuffer* m_indexBuffer;
 
-public:
-	
-	glm::mat4 model;
 
-	Mesh(std::vector<VertexPositionNormalTexture> vertices, std::vector<int> indices);
+public:
+
+	glm::mat4 model;
+	Shader* shader;
+
+	Mesh();
+	Mesh(std::vector<VertexPositionNormalTexture> vertices, std::vector<unsigned int> indices);
 	~Mesh();
 
-	void Draw(glm::mat4 &view, glm::mat4 &projection, Shader *shader, float deltaTime);
+	void Draw(glm::mat4 &view, glm::mat4 &projection, float deltaTime);
 
 };
 

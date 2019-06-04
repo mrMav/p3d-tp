@@ -23,6 +23,7 @@
 #include "VertexPositionNormalTexture.h"
 #include "Viewport.h"
 #include "OrbitCamera.h"
+#include "Model.h"
 
 void error_callback(int error, const char* description);
 
@@ -34,62 +35,43 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
-int screenWidth = 800;
-int screenHeight = 600;
-float fov = 45.0f;
-
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
-
-float lastX = screenWidth / 2, lastY = screenHeight / 2;
-float mouseYaw = 0.0f, mousePitch = 0.0f;
-bool firstMouse = true;
 
 Viewport viewport = Viewport(800, 600);
 OrbitCamera camera = OrbitCamera(&viewport, glm::vec3(0), 5.0f, 45.0f);
 
+/* cursor input properties*/
+float lastX = viewport.Width() / 2;
+float lastY = viewport.Height() / 2;
+float mouseYaw = 0.0f;
+float mousePitch = 0.0f;
+bool firstMouse = true;
+
 int main(void) {
-	
-
-	objl::Loader loader;
-
-	bool sucess;
-	//sucess = loader.LoadFile("Iron_Man/Iron_Man.obj");
-
-	if (sucess) {
-
-		// if sucess, we can now build our own meshes with 
-		// loader.LoadedMeshes
-
-	}
-	else {
-
-		printf("Loading error\n");
-
-	}
 
 	GLFWwindow* window;
 
 	glfwSetErrorCallback(error_callback);
-	
+
 	if (!glfwInit()) {
-		
+
 		return -1;
-	
+
 	}
-	
+
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	window = glfwCreateWindow(viewport.Width(), viewport.Height(), "P3D-TP", NULL, NULL);
-	
+
 	if (!window) {
-		
+
 		glfwTerminate();
-		
+
 		return -1;
-	
+
 	}
 
 	glfwMakeContextCurrent(window);
@@ -98,7 +80,7 @@ int main(void) {
 	// print opengl profile info
 	std::cout << glGetString(GL_VERSION) << " " << glGetString(GL_VENDOR) << " " << glGetString(GL_RENDERER) << std::endl;
 
-	/*	
+	/*
 		init glew, and set some state for rendering
 	*/
 
@@ -107,87 +89,142 @@ int main(void) {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-	glFrontFace(GL_CW);
+	glFrontFace(GL_CCW);
 	glViewport(0, 0, viewport.Width(), viewport.Height());
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
-	
-	/* Define a cube geometry and colors */	
-	std::vector<VertexPositionNormalTexture> vertices = {
 
-		// positions          // rgb colors
-		// front face         
-		VertexPositionNormalTexture{-0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f},
-		VertexPositionNormalTexture{ 0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f},
-		VertexPositionNormalTexture{ 0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f},
-		VertexPositionNormalTexture{-0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f},
-		
-		 // back face
-		VertexPositionNormalTexture{ 0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 0.0f, 0.0f},
-		VertexPositionNormalTexture{-0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 1.0f, 0.0f},
-		VertexPositionNormalTexture{-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 1.0f, 1.0f},
-		VertexPositionNormalTexture{ 0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 0.0f, 1.0f},
-
-		// left face
-		VertexPositionNormalTexture{-0.5f,  0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f},
-		VertexPositionNormalTexture{-0.5f,  0.5f,  0.5f, -1.0f, 0.0f, 0.0f,	1.0f, 0.0f},
-		VertexPositionNormalTexture{-0.5f, -0.5f,  0.5f, -1.0f, 0.0f, 0.0f,	1.0f, 1.0f},
-		VertexPositionNormalTexture{-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,	0.0f, 1.0f},
-
-		// right face
-		VertexPositionNormalTexture{ 0.5f,  0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f},
-		VertexPositionNormalTexture{ 0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f},
-		VertexPositionNormalTexture{ 0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f},
-		VertexPositionNormalTexture{ 0.5f, -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f},
-
-		// top face
-		VertexPositionNormalTexture{-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 0.0f},
-		VertexPositionNormalTexture{ 0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 0.0f},
-		VertexPositionNormalTexture{ 0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 1.0f},
-		VertexPositionNormalTexture{-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f},
-
-		// bottom face
-		VertexPositionNormalTexture{-0.5f, -0.5f,  0.5f,  0.0f, -1.0f, 0.0f, 0.0f, 0.0f},
-		VertexPositionNormalTexture{ 0.5f, -0.5f,  0.5f,  0.0f, -1.0f, 0.0f, 1.0f, 0.0f},
-		VertexPositionNormalTexture{ 0.5f, -0.5f, -0.5f,  0.0f, -1.0f, 0.0f, 1.0f, 1.0f},
-		VertexPositionNormalTexture{-0.5f, -0.5f, -0.5f,  0.0f, -1.0f, 0.0f, 0.0f, 1.0f},
-	
-	};
-
-	std::vector<int> indices = {
-
-		// front face
-		0, 1, 3,
-		1, 2, 3,
-
-		// back face
-		4, 5, 7,
-		5, 6, 7,
-
-		// left face
-		8, 9, 11,
-		9, 10, 11,
-
-		// right face
-		12, 13, 15,
-		13, 14, 15,
-
-		// top face
-		16, 17, 19, 
-		17, 18, 19,  
-
-		// bottom face
-		20, 21, 23,  
-		21, 22, 23  
-
-	};
 
 	Shader shader("Texture.vert", "Texture.frag");
 	Texture2D woodBoxTexture("box-wood.png", GL_RGBA);
-	Mesh cubeMesh { vertices, indices };
-	
+
+	/* load 3d model */
+	objl::Loader loader;
+
+	bool sucess = false;
+	sucess = loader.LoadFile("Iron_Man/Iron_Man.obj");
+
+	Model ironMan;
+	Mesh ironMesh;
+
+
+	if (sucess) {
+
+		// if sucess, we can now build our own meshes with 
+		// lets build the meshes
+		for (int i = 0; i < loader.LoadedMeshes.size(); i++) {
+
+			std::vector<VertexPositionNormalTexture> vertices;
+
+			// create an array of our own vertexPositionNormalTexture
+			for (int j = 0; j < loader.LoadedMeshes[i].Vertices.size(); j++) {
+
+				objl::Vertex _v = loader.LoadedMeshes[i].Vertices[j];
+
+				VertexPositionNormalTexture v{
+					glm::vec3(_v.Position.X, _v.Position.Y, _v.Position.Z),
+					glm::vec3(_v.Normal.X, _v.Normal.Y, _v.Normal.Z),
+					glm::vec2(_v.TextureCoordinate.X , _v.TextureCoordinate.Y)
+				};
+
+				vertices.push_back(v);
+
+			}
+			/*Mesh* m = new Mesh(vertices, loader.LoadedMeshes[i].Indices);
+			m->shader = &shader;
+			m->model = glm::scale(m->model, glm::vec3(2.0f));
+
+			ironMan.meshes.push_back(m);*/
+
+			ironMesh = { vertices, loader.LoadedMeshes[i].Indices };
+			ironMesh.shader = &shader;
+
+		}
+
+	}
+	else {
+
+		printf("Loading error\n");
+		//exit(-1);
+
+	}
+
+
+	/* Define a cube geometry and colors */
+	//std::vector<VertexPositionNormalTexture> vertices = {
+
+	//	// positions          // rgb colors
+	//	// front face         
+	//	VertexPositionNormalTexture{-0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f},
+	//	VertexPositionNormalTexture{ 0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f},
+	//	VertexPositionNormalTexture{ 0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f},
+	//	VertexPositionNormalTexture{-0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f},
+	//	
+	//	 // back face
+	//	VertexPositionNormalTexture{ 0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 0.0f, 0.0f},
+	//	VertexPositionNormalTexture{-0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 1.0f, 0.0f},
+	//	VertexPositionNormalTexture{-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 1.0f, 1.0f},
+	//	VertexPositionNormalTexture{ 0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 0.0f, 1.0f},
+
+	//	// left face
+	//	VertexPositionNormalTexture{-0.5f,  0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f},
+	//	VertexPositionNormalTexture{-0.5f,  0.5f,  0.5f, -1.0f, 0.0f, 0.0f,	1.0f, 0.0f},
+	//	VertexPositionNormalTexture{-0.5f, -0.5f,  0.5f, -1.0f, 0.0f, 0.0f,	1.0f, 1.0f},
+	//	VertexPositionNormalTexture{-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,	0.0f, 1.0f},
+
+	//	// right face
+	//	VertexPositionNormalTexture{ 0.5f,  0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f},
+	//	VertexPositionNormalTexture{ 0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f},
+	//	VertexPositionNormalTexture{ 0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f},
+	//	VertexPositionNormalTexture{ 0.5f, -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f},
+
+	//	// top face
+	//	VertexPositionNormalTexture{-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 0.0f},
+	//	VertexPositionNormalTexture{ 0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 0.0f},
+	//	VertexPositionNormalTexture{ 0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 1.0f},
+	//	VertexPositionNormalTexture{-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f},
+
+	//	// bottom face
+	//	VertexPositionNormalTexture{-0.5f, -0.5f,  0.5f,  0.0f, -1.0f, 0.0f, 0.0f, 0.0f},
+	//	VertexPositionNormalTexture{ 0.5f, -0.5f,  0.5f,  0.0f, -1.0f, 0.0f, 1.0f, 0.0f},
+	//	VertexPositionNormalTexture{ 0.5f, -0.5f, -0.5f,  0.0f, -1.0f, 0.0f, 1.0f, 1.0f},
+	//	VertexPositionNormalTexture{-0.5f, -0.5f, -0.5f,  0.0f, -1.0f, 0.0f, 0.0f, 1.0f},
+	//
+	//};
+
+	//std::vector<unsigned int> indices = {
+
+	//	// front face
+	//	0, 1, 3,
+	//	1, 2, 3,
+
+	//	// back face
+	//	4, 5, 7,
+	//	5, 6, 7,
+
+	//	// left face
+	//	8, 9, 11,
+	//	9, 10, 11,
+
+	//	// right face
+	//	12, 13, 15,
+	//	13, 14, 15,
+
+	//	// top face
+	//	16, 17, 19, 
+	//	17, 18, 19,  
+
+	//	// bottom face
+	//	20, 21, 23,  
+	//	21, 22, 23  
+
+	//};
+
+	//Mesh cubeMesh { vertices, indices };
+	//cubeMesh.shader = &shader;
+
 	while (!glfwWindowShouldClose(window)) {
 
 		process_input(window);
@@ -195,22 +232,26 @@ int main(void) {
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-		
+
 		glClearColor(0.1, 0.1, 0.1, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
+
 		camera.Update(deltaTime);
 
 		//cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(0.0f, 1.0f, 0.0f));
 		//cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(1.0f, 0.0f, 0.0f));
 		//cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(0.0f, 0.0f, 1.0f));
 
-		cubeMesh.Draw(camera.view_transform, camera.projection_transform, &shader, deltaTime);
-		
+		//cubeMesh.Draw(camera.view_transform, camera.projection_transform, deltaTime);
+
+		//ironMan.meshes[0]->Draw(camera.view_transform, camera.projection_transform, deltaTime);
+
+		ironMesh.Draw(camera.view_transform, camera.projection_transform, deltaTime);
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-	
+
 	glfwDestroyWindow(window);
 
 	glfwTerminate();
@@ -223,8 +264,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 
 	glViewport(0, 0, width, height);
 
-	screenWidth = width;
-	screenHeight = height;
+	viewport.SetWidth(width);
+	viewport.SetHeight(height);
 
 }
 
@@ -262,7 +303,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 	lastY = ypos;
 
 	camera.ProcessMouseMovement(xoffset, yoffset);
-	
+
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {

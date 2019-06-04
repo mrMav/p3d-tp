@@ -21,13 +21,13 @@ private:
 	int m_dataCount;
 
 public:
-	
+
 	VertexBuffer(std::vector<VertexPositionNormalTexture> data);  // later we can add support for other vertex types
 	~VertexBuffer();
 
 	void Bind();
 
 	void Unbind();
-	
+
 };
 
