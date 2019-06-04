@@ -57,7 +57,7 @@ void Mesh::Draw(glm::mat4 &view, glm::mat4 &projection, float deltaTime)
 	shader->setMat4("view", view);
 	shader->setMat4("projection", projection);
 
-	m_vertexBuffer->Bind();
+	glBindVertexArray(m_vao);
 	glDrawElements(GL_TRIANGLES, m_indexBuffer->GetDataCount(), GL_UNSIGNED_INT, 0);
 
 }

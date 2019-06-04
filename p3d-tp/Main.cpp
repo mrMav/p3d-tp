@@ -89,7 +89,7 @@ int main(void) {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
+	glFrontFace(GL_CW);
 	glViewport(0, 0, viewport.Width(), viewport.Height());
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -117,6 +117,7 @@ int main(void) {
 		for (int i = 0; i < loader.LoadedMeshes.size(); i++) {
 
 			std::vector<VertexPositionNormalTexture> vertices;
+			std::vector<unsigned int> indices;
 
 			// create an array of our own vertexPositionNormalTexture
 			for (int j = 0; j < loader.LoadedMeshes[i].Vertices.size(); j++) {
@@ -132,14 +133,24 @@ int main(void) {
 				vertices.push_back(v);
 
 			}
-			/*Mesh* m = new Mesh(vertices, loader.LoadedMeshes[i].Indices);
+
+			// we will now build a indices vector.
+			// the loaded indices are built in CCW
+			// but we are using CW winding in this application
+			for (int k = loader.LoadedMeshes[i].Indices.size() - 1; k >= 0; k--) {
+
+				indices.push_back(loader.LoadedMeshes[i].Indices[k]);
+
+			}
+
+			Mesh* m = new Mesh(vertices, indices);
 			m->shader = &shader;
-			m->model = glm::scale(m->model, glm::vec3(2.0f));
+			m->model = glm::scale(m->model, glm::vec3(0.5f));
 
-			ironMan.meshes.push_back(m);*/
+			ironMan.meshes.push_back(m);
 
-			ironMesh = { vertices, loader.LoadedMeshes[i].Indices };
-			ironMesh.shader = &shader;
+			//ironMesh = { vertices, loader.LoadedMeshes[i].Indices };
+			//ironMesh.shader = &shader;
 
 		}
 
@@ -153,77 +164,77 @@ int main(void) {
 
 
 	/* Define a cube geometry and colors */
-	//std::vector<VertexPositionNormalTexture> vertices = {
+	std::vector<VertexPositionNormalTexture> vertices = {
 
-	//	// positions          // rgb colors
-	//	// front face         
-	//	VertexPositionNormalTexture{-0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f},
-	//	VertexPositionNormalTexture{ 0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f},
-	//	VertexPositionNormalTexture{ 0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f},
-	//	VertexPositionNormalTexture{-0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f},
-	//	
-	//	 // back face
-	//	VertexPositionNormalTexture{ 0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 0.0f, 0.0f},
-	//	VertexPositionNormalTexture{-0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 1.0f, 0.0f},
-	//	VertexPositionNormalTexture{-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 1.0f, 1.0f},
-	//	VertexPositionNormalTexture{ 0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 0.0f, 1.0f},
+		// positions          // rgb colors
+		// front face         
+		VertexPositionNormalTexture{-0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f},
+		VertexPositionNormalTexture{ 0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f},
+		VertexPositionNormalTexture{ 0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f},
+		VertexPositionNormalTexture{-0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f},
+		
+		 // back face
+		VertexPositionNormalTexture{ 0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 0.0f, 0.0f},
+		VertexPositionNormalTexture{-0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 1.0f, 0.0f},
+		VertexPositionNormalTexture{-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 1.0f, 1.0f},
+		VertexPositionNormalTexture{ 0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f, 0.0f, 1.0f},
 
-	//	// left face
-	//	VertexPositionNormalTexture{-0.5f,  0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f},
-	//	VertexPositionNormalTexture{-0.5f,  0.5f,  0.5f, -1.0f, 0.0f, 0.0f,	1.0f, 0.0f},
-	//	VertexPositionNormalTexture{-0.5f, -0.5f,  0.5f, -1.0f, 0.0f, 0.0f,	1.0f, 1.0f},
-	//	VertexPositionNormalTexture{-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,	0.0f, 1.0f},
+		// left face
+		VertexPositionNormalTexture{-0.5f,  0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f},
+		VertexPositionNormalTexture{-0.5f,  0.5f,  0.5f, -1.0f, 0.0f, 0.0f,	1.0f, 0.0f},
+		VertexPositionNormalTexture{-0.5f, -0.5f,  0.5f, -1.0f, 0.0f, 0.0f,	1.0f, 1.0f},
+		VertexPositionNormalTexture{-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,	0.0f, 1.0f},
 
-	//	// right face
-	//	VertexPositionNormalTexture{ 0.5f,  0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f},
-	//	VertexPositionNormalTexture{ 0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f},
-	//	VertexPositionNormalTexture{ 0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f},
-	//	VertexPositionNormalTexture{ 0.5f, -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f},
+		// right face
+		VertexPositionNormalTexture{ 0.5f,  0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f},
+		VertexPositionNormalTexture{ 0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f},
+		VertexPositionNormalTexture{ 0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f},
+		VertexPositionNormalTexture{ 0.5f, -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f},
 
-	//	// top face
-	//	VertexPositionNormalTexture{-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 0.0f},
-	//	VertexPositionNormalTexture{ 0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 0.0f},
-	//	VertexPositionNormalTexture{ 0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 1.0f},
-	//	VertexPositionNormalTexture{-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f},
+		// top face
+		VertexPositionNormalTexture{-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 0.0f},
+		VertexPositionNormalTexture{ 0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 0.0f},
+		VertexPositionNormalTexture{ 0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 1.0f},
+		VertexPositionNormalTexture{-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f},
 
-	//	// bottom face
-	//	VertexPositionNormalTexture{-0.5f, -0.5f,  0.5f,  0.0f, -1.0f, 0.0f, 0.0f, 0.0f},
-	//	VertexPositionNormalTexture{ 0.5f, -0.5f,  0.5f,  0.0f, -1.0f, 0.0f, 1.0f, 0.0f},
-	//	VertexPositionNormalTexture{ 0.5f, -0.5f, -0.5f,  0.0f, -1.0f, 0.0f, 1.0f, 1.0f},
-	//	VertexPositionNormalTexture{-0.5f, -0.5f, -0.5f,  0.0f, -1.0f, 0.0f, 0.0f, 1.0f},
-	//
-	//};
+		// bottom face
+		VertexPositionNormalTexture{-0.5f, -0.5f,  0.5f,  0.0f, -1.0f, 0.0f, 0.0f, 0.0f},
+		VertexPositionNormalTexture{ 0.5f, -0.5f,  0.5f,  0.0f, -1.0f, 0.0f, 1.0f, 0.0f},
+		VertexPositionNormalTexture{ 0.5f, -0.5f, -0.5f,  0.0f, -1.0f, 0.0f, 1.0f, 1.0f},
+		VertexPositionNormalTexture{-0.5f, -0.5f, -0.5f,  0.0f, -1.0f, 0.0f, 0.0f, 1.0f},
+	
+	};
 
-	//std::vector<unsigned int> indices = {
+	std::vector<unsigned int> indices = {
 
-	//	// front face
-	//	0, 1, 3,
-	//	1, 2, 3,
+		// front face
+		0, 1, 3,
+		1, 2, 3,
 
-	//	// back face
-	//	4, 5, 7,
-	//	5, 6, 7,
+		// back face
+		4, 5, 7,
+		5, 6, 7,
 
-	//	// left face
-	//	8, 9, 11,
-	//	9, 10, 11,
+		// left face
+		8, 9, 11,
+		9, 10, 11,
 
-	//	// right face
-	//	12, 13, 15,
-	//	13, 14, 15,
+		// right face
+		12, 13, 15,
+		13, 14, 15,
 
-	//	// top face
-	//	16, 17, 19, 
-	//	17, 18, 19,  
+		// top face
+		16, 17, 19, 
+		17, 18, 19,  
 
-	//	// bottom face
-	//	20, 21, 23,  
-	//	21, 22, 23  
+		// bottom face
+		20, 21, 23,  
+		21, 22, 23  
 
-	//};
+	};
 
-	//Mesh cubeMesh { vertices, indices };
-	//cubeMesh.shader = &shader;
+	Mesh cubeMesh { vertices, indices };
+	cubeMesh.shader = &shader;
 
 	while (!glfwWindowShouldClose(window)) {
 
@@ -242,11 +253,13 @@ int main(void) {
 		//cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(1.0f, 0.0f, 0.0f));
 		//cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(0.0f, 0.0f, 1.0f));
 
-		//cubeMesh.Draw(camera.view_transform, camera.projection_transform, deltaTime);
+		cubeMesh.Draw(camera.view_transform, camera.projection_transform, deltaTime);
 
 		//ironMan.meshes[0]->Draw(camera.view_transform, camera.projection_transform, deltaTime);
 
-		ironMesh.Draw(camera.view_transform, camera.projection_transform, deltaTime);
+		//ironMesh.Draw(camera.view_transform, camera.projection_transform, deltaTime);
+
+		ironMan.Draw(camera.view_transform, camera.projection_transform, deltaTime);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
