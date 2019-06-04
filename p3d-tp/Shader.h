@@ -88,6 +88,8 @@ public:
 
 		}
 
+		GLUtils::CheckErrors();
+
 		// fragment shader
 		fragment = glCreateShader(GL_FRAGMENT_SHADER);
 		glShaderSource(fragment, 1, &fShaderCode, NULL);
@@ -102,6 +104,8 @@ public:
 
 		}
 
+		GLUtils::CheckErrors();
+
 		this->program = glCreateProgram();
 		glAttachShader(this->program, vertex);
 		glAttachShader(this->program, fragment);
@@ -115,6 +119,8 @@ public:
 			cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << endl;
 
 		}
+
+		GLUtils::CheckErrors();
 
 		glDeleteShader(vertex);
 		glDeleteShader(fragment);
@@ -131,15 +137,18 @@ public:
 	void setVec3(const std::string &name, const glm::vec3 &value) const
 	{
 		glUniform3fv(glGetUniformLocation(program, name.c_str()), 1, &value[0]);
+		GLUtils::CheckErrors();
 	}
 
 	void setVec3(const std::string &name, float x, float y, float z) const
 	{
 		glUniform3f(glGetUniformLocation(program, name.c_str()), x, y, z);
+		GLUtils::CheckErrors();
 	}
 
 	void setMat4(const std::string &name, const glm::mat4 &mat) const
 	{
 		glUniformMatrix4fv(glGetUniformLocation(program, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+		GLUtils::CheckErrors();
 	}
 };
