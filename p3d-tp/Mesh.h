@@ -7,6 +7,7 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "Shader.h"
+#include "Material.h"
 
 class Mesh
 {
@@ -21,7 +22,7 @@ private:
 public:
 
 	glm::mat4 model;
-	Shader* shader;
+	Material* material;
 
 	Mesh();
 	Mesh(std::vector<VertexPositionNormalTexture> vertices, std::vector<unsigned int> indices);

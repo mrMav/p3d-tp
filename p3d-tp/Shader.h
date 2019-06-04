@@ -11,6 +11,7 @@
 #include <sstream>
 #include <iostream>
 
+#include "GLUtils.h"
 
 /*
  * This is a helper class that handles all the shader stuff.
@@ -131,6 +132,13 @@ public:
 	void use() {
 
 		glUseProgram(this->program);
+
+	}
+
+	void setFloat(const std::string &name, const float value) {
+
+		glUniform1f(glGetUniformLocation(program, name.c_str()), value);
+		GLUtils::CheckErrors();
 
 	}
 

@@ -19,7 +19,7 @@ public:
 
 	int width, height, channels;
 
-	Texture2D(const char* filename, GLint format) {
+	Texture2D(const char* filename) {
 
 		stbi_set_flip_vertically_on_load(true);
 		

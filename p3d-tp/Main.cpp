@@ -24,6 +24,8 @@
 #include "Viewport.h"
 #include "OrbitCamera.h"
 #include "Model.h"
+#include "Material.h"
+#include "DirectionalLight.h"
 
 void error_callback(int error, const char* description);
 
@@ -95,10 +97,14 @@ int main(void) {
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
-
+	
 
 	Shader shader("Texture.vert", "Texture.frag");
-	Texture2D woodBoxTexture("box-wood.png", GL_RGBA);
+	
+	DirectionalLight dirLight { glm::vec3(-5.0f, -5.0f, -5.0f), glm::vec3(1.0f, 0.8f, 0.9f), glm::vec3(1.0f)};
+	Material material1{ "box-wood.png" };
+	
+	Texture2D woodBoxTexture("box-wood.png");
 
 	/* load 3d model */
 	objl::Loader loader;
@@ -144,7 +150,7 @@ int main(void) {
 			}
 
 			Mesh* m = new Mesh(vertices, indices);
-			m->shader = &shader;
+			m->material = &material1;
 			m->model = glm::scale(m->model, glm::vec3(0.5f));
 
 			ironMan.meshes.push_back(m);
@@ -158,7 +164,7 @@ int main(void) {
 	else {
 
 		printf("Loading error\n");
-		//exit(-1);
+		exit(-10);
 
 	}
 
@@ -234,7 +240,7 @@ int main(void) {
 	};
 
 	Mesh cubeMesh { vertices, indices };
-	cubeMesh.shader = &shader;
+	cubeMesh.material = &material1;
 
 	while (!glfwWindowShouldClose(window)) {
 
@@ -249,16 +255,19 @@ int main(void) {
 
 		camera.Update(deltaTime);
 
-		//cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(0.0f, 1.0f, 0.0f));
-		//cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(1.0f, 0.0f, 0.0f));
-		//cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(0.0f, 0.0f, 1.0f));
+		cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(0.0f, 1.0f, 0.0f));
+		cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(1.0f, 0.0f, 0.0f));
+		cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+		// update material properties
+		material1.shader->use();
+		material1.shader->setVec3("dirLight.direction", dirLight.direction);
+		material1.shader->setVec3("dirLight.diffuse", dirLight.diffuse);
+		material1.shader->setVec3("dirLight.specular", dirLight.specular);
+
+		material1.shader->setVec3("viewPos", camera.position);
 
 		cubeMesh.Draw(camera.view_transform, camera.projection_transform, deltaTime);
-
-		//ironMan.meshes[0]->Draw(camera.view_transform, camera.projection_transform, deltaTime);
-
-		//ironMesh.Draw(camera.view_transform, camera.projection_transform, deltaTime);
-
 		ironMan.Draw(camera.view_transform, camera.projection_transform, deltaTime);
 
 		glfwSwapBuffers(window);
