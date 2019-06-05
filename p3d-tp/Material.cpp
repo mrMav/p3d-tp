@@ -4,7 +4,7 @@
 Material::Material(std::string diffuse_filename)
 {
 
-	shader = new Shader("Texture.vert", "Texture.frag");
+	shader = new Shader("EffectVertex.vert", "Texture.frag");
 
 	m_diffuseMap = new Texture2D(diffuse_filename.c_str());
 

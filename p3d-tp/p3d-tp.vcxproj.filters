@@ -59,6 +59,9 @@
     <None Include="Texture.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="EffectVertex.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">

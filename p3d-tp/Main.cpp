@@ -55,6 +55,7 @@ float mouseYaw = 0.0f;
 float mousePitch = 0.0f;
 bool firstMouse = true;
 bool isDragging = false;
+bool isEffectActive = false;
 
 AmbientLight ambLight{ glm::vec3(0.2f), 1.0f };
 DirectionalLight dirLight{ glm::vec3(-5.0f), glm::vec3(0.3f), glm::vec3(1.0f), glm::vec3(1.0f) };
@@ -115,10 +116,10 @@ int main(void) {
 	spotLight.ambient = glm::vec3(0, 0, 0);
 	spotLight.diffuse = glm::vec3(0.2, 0.8, 0.2);
 	spotLight.specular = glm::vec3(0, 1.0, 0);
-	spotLight.constant = 0.1;
-	spotLight.linear = 0.007;
-	spotLight.quadractic = 0.0002;  // see https://learnopengl.com/Lighting/Light-casters
-	spotLight.isActive = 0;
+	spotLight.constant = 0.3;
+	spotLight.linear = 0.01;
+	spotLight.quadractic = 0.004;  // see https://learnopengl.com/Lighting/Light-casters
+	spotLight.isActive = 1;
 
 	Material material1{ "box-wood.png" };
 	
@@ -294,7 +295,6 @@ int main(void) {
 		cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 		// update material properties
-
 		for (int i = 0; i < ironMan.meshes.size(); i++) {
 
 			ambLight.SetShader(ironMan.meshes[i]->material->shader);
@@ -302,6 +302,8 @@ int main(void) {
 			omniLight.SetShader(ironMan.meshes[i]->material->shader);
 			spotLight.SetShader(ironMan.meshes[i]->material->shader);
 
+			ironMan.meshes[i]->material->shader->setFloat("time", glfwGetTime());
+			ironMan.meshes[i]->material->shader->setInt("isEffectActive", isEffectActive ? 1 : 0);
 			ironMan.meshes[i]->material->shader->setVec3("viewPos", camera.position);
 
 		};
@@ -310,6 +312,8 @@ int main(void) {
 		dirLight.SetShader(material1.shader);
 		omniLight.SetShader(material1.shader);
 		spotLight.SetShader(material1.shader);
+		material1.shader->setFloat("time", glfwGetTime());
+		material1.shader->setInt("isEffectActive", isEffectActive ? 1 : 0);
 		material1.shader->setVec3("viewPos", camera.position);
 		
 		cubeMesh.Draw(camera.view_transform, camera.projection_transform, deltaTime);
@@ -355,6 +359,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_4 && action == GLFW_PRESS)
 		spotLight.isActive = !spotLight.isActive;
+
+	if (key == GLFW_KEY_E && action == GLFW_PRESS)
+		isEffectActive = !isEffectActive;
 
 }
 
