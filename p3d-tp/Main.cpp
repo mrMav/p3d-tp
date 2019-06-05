@@ -36,6 +36,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 void process_input(GLFWwindow* window);
 
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -53,6 +55,11 @@ float mouseYaw = 0.0f;
 float mousePitch = 0.0f;
 bool firstMouse = true;
 bool isDragging = false;
+
+AmbientLight ambLight{ glm::vec3(0.2f), 1.0f };
+DirectionalLight dirLight{ glm::vec3(-5.0f), glm::vec3(0.3f), glm::vec3(1.0f), glm::vec3(1.0f) };
+OmniLight omniLight{ glm::vec3(0, 1, -0.8), glm::vec3(1, 0, 0) };
+SpotLight spotLight{ glm::vec3(0, 2, 0), glm::vec3(0.5, -1, 0) };
 
 int main(void) {
 
@@ -99,15 +106,12 @@ int main(void) {
 	glViewport(0, 0, viewport.Width(), viewport.Height());
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetKeyCallback(window, key_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 	
 	Shader shader("Texture.vert", "Texture.frag");
 	
-	AmbientLight ambLight{ glm::vec3(0.2f), 1.0f };
-	DirectionalLight dirLight{ glm::vec3(-5.0f), glm::vec3(0.3f), glm::vec3(1.0f), glm::vec3(1.0f) };
-	OmniLight omniLight{ glm::vec3(0, 1, -0.8), glm::vec3(1, 0, 0) };
-	SpotLight spotLight { glm::vec3(0, 2, 0), glm::vec3(0.5, -1, 0) };
 	spotLight.ambient = glm::vec3(0, 0, 0);
 	spotLight.diffuse = glm::vec3(0.2, 0.8, 0.2);
 	spotLight.specular = glm::vec3(0, 1.0, 0);
@@ -335,6 +339,22 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 void error_callback(int error, const char* description) {
 
 	std::cout << "ERROR " << error << ": " << description;
+
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (key == GLFW_KEY_1 && action == GLFW_PRESS)
+		ambLight.isActive = !ambLight.isActive;
+	
+	if (key == GLFW_KEY_2 && action == GLFW_PRESS)
+		dirLight.isActive = !dirLight.isActive;
+
+	if (key == GLFW_KEY_3 && action == GLFW_PRESS)
+		omniLight.isActive = !omniLight.isActive;
+
+	if (key == GLFW_KEY_4 && action == GLFW_PRESS)
+		spotLight.isActive = !spotLight.isActive;
 
 }
 
