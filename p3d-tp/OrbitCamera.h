@@ -14,7 +14,9 @@ public:
 	// create variables to hold the current camera position and target
 	glm::vec3 original_position;
 	glm::vec3 position;
+	glm::vec3 target_target;
 	glm::vec3 target;
+
 	
 	// these are the matrices to be used when this camera is active
 	glm::mat4 view_transform;
@@ -41,7 +43,7 @@ public:
 
 	void Update(float gametime);
 
-	void ProcessMouseMovement(float xoffset, float yoffset, bool constrain_pitch = true);
+	void ProcessMouseMovement(float xoffset, float yoffset, bool isDragging, bool constrain_pitch = true);
 
 	void ProcessMouseScroll(float wheelvalue);
 

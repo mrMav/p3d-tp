@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include <GLFW/glfw3.h>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
@@ -42,6 +44,9 @@ void OrbitCamera::Update(float deltatime) {
 	float midWidth  = viewport->Width()  / 2.0f;
 	float midHeight = viewport->Height() / 2.0f;
 
+	// smooth pan
+	if (target != target_target) target += (target_target - target) * deltatime;
+
 	glm::vec4 pos = glm::vec4(0, 0, offset_distance, 1);
 
 	glm::mat4 rotationX = glm::rotate(glm::radians(pitch), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -64,22 +69,37 @@ void OrbitCamera::Update(float deltatime) {
 
 }
 
-void OrbitCamera::ProcessMouseMovement(float xoffset, float yoffset, bool constrain_pitch) {
-
-	xoffset *= mouse_sensitivity;
-	yoffset *= mouse_sensitivity;
-
-	yaw += xoffset;
-	pitch -= yoffset;
-
-	if (constrain_pitch) {
-
-		if (pitch > 89.0f) pitch = 89.0f;
-
-		if (pitch < -89.0f) pitch = -89.0f;
-	}
+void OrbitCamera::ProcessMouseMovement(float xoffset, float yoffset, bool isDragging, bool constrain_pitch) {
 
 	// printf("Position: %s, Pitch: %f, Yaw: %f\n", glm::to_string(position).c_str(), xoffset, yoffset);
+	
+	
+	if (isDragging) {
+
+		float translation_factor = 0.2f;
+
+		glm::vec4 translation = (glm::vec4{ xoffset * mouse_sensitivity, yoffset * mouse_sensitivity, 0.0f, 0.0f } * translation_factor) * view_transform;
+
+		position += glm::vec3(translation);
+		target_target += glm::vec3(translation);
+
+	}
+	else {
+
+		xoffset *= mouse_sensitivity;
+		yoffset *= mouse_sensitivity;
+
+		yaw += xoffset;
+		pitch -= yoffset;
+
+		if (constrain_pitch) {
+
+			if (pitch > 89.0f) pitch = 89.0f;
+
+			if (pitch < -89.0f) pitch = -89.0f;
+		}
+
+	}
 
 }
 

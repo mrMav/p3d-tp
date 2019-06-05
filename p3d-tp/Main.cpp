@@ -49,6 +49,7 @@ float lastY = viewport.Height() / 2;
 float mouseYaw = 0.0f;
 float mousePitch = 0.0f;
 bool firstMouse = true;
+bool isDragging = false;
 
 int main(void) {
 
@@ -300,12 +301,11 @@ void error_callback(int error, const char* description) {
 void process_input(GLFWwindow* window) {
 
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-
+		
 		glfwSetWindowShouldClose(window, true);
 
 	}
-
-
+		   
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
@@ -324,7 +324,18 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 	lastX = xpos;
 	lastY = ypos;
 
-	camera.ProcessMouseMovement(xoffset, yoffset);
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
+
+		isDragging = true;
+
+	}
+	else {
+
+		isDragging = false;
+
+	}
+
+	camera.ProcessMouseMovement(xoffset, yoffset, isDragging);
 
 }
 
