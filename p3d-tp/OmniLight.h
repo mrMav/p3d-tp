@@ -1,7 +1,9 @@
 #pragma once
 #include <glm/glm.hpp>
 
-class OmniLight {
+#include "BaseLight.h"
+
+class OmniLight : public BaseLight {
 
 public:
 
@@ -37,6 +39,8 @@ public:
 
 		shader->use();
 		
+		shader->setInt("omniLight.isActive", isActive);
+
 		shader->setVec3("omniLight.position", position);
 
 		shader->setVec3("omniLight.ambient", ambient);

@@ -28,6 +28,8 @@ struct Mat {
 
 struct AmbientLight {
 
+	int isActive;
+
 	vec3 ambient;
 
 	float intensity;
@@ -35,6 +37,8 @@ struct AmbientLight {
 };
 
 struct DirectionalLight {
+
+	int isActive;
 
     vec3 direction;
 
@@ -44,6 +48,8 @@ struct DirectionalLight {
 };
 
 struct OmniLight {
+
+	int isActive;
 
     vec3 position;
 	
@@ -58,8 +64,11 @@ struct OmniLight {
 
 struct SpotLight {
 
+	int isActive;
+
     vec3 position;
     vec3 direction;
+
     float cutOff;
     float outerCutOff;
   
@@ -76,7 +85,7 @@ uniform vec3 viewPos;
 uniform AmbientLight ambLight;
 uniform DirectionalLight dirLight;
 uniform OmniLight omniLight;
-//uniform SpotLight spotLight;
+uniform SpotLight spotLight;
 uniform Mat material;
 
 vec3 GetAmbientLightInfluence(AmbientLight light);
@@ -95,11 +104,20 @@ void main() {
 	// the resulting color
 	vec3 result = vec3(0);
 
-	// calculate the influence of the directional light
-	result += GetAmbientLightInfluence(ambLight);
-	result += GetDirectionalLightInfluence(dirLight, norm, viewDir);
-	result += GetOmniLightInfluence(omniLight, norm, FragPos, viewDir);
+	// calculate the influence of the lights
+
+	if(ambLight.isActive == 1)
+		result += GetAmbientLightInfluence(ambLight);
+
+	if(dirLight.isActive == 1)
+		result += GetDirectionalLightInfluence(dirLight, norm, viewDir);
 	
+	if(omniLight.isActive == 1)
+		result += GetOmniLightInfluence(omniLight, norm, FragPos, viewDir);
+
+	if(spotLight.isActive == 1)
+		result += GetSpotLightInfluence(spotLight, norm, FragPos, viewDir);
+		
 	// output color
 	FragColor = vec4(result, 1.0);
 
@@ -169,5 +187,35 @@ vec3 GetOmniLightInfluence(OmniLight light, vec3 normal, vec3 fragPos, vec3 view
     specular *= attenuation;
 
     return (ambient + diffuse + specular);
+
+}
+
+vec3 GetSpotLightInfluence(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
+	  
+	vec3 texel = vec3(texture(material.diffuseMap, TexCoord));
+
+    // diffuse 
+    vec3 lightDir = normalize(spotLight.position - fragPos);
+    float diff = max(dot(normal, lightDir), 0.0);
+    
+    // specular
+    vec3 reflectDir = reflect(-lightDir, normal);  
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.Ns);
+    
+    // spotlight (soft edges)
+    float theta = dot(lightDir, normalize(-spotLight.direction)); 
+    float epsilon = (spotLight.cutOff - spotLight.outerCutOff);
+    float intensity = clamp((theta - spotLight.outerCutOff) / epsilon, 0.0, 1.0);
+    
+    // attenuation
+    float distance    = length(spotLight.position - fragPos);
+    float attenuation = 1.0 / (spotLight.constant + spotLight.linear * distance + spotLight.quadratic * (distance * distance));    
+    
+	//combine
+	vec3 ambient = spotLight.ambient * texel * attenuation;
+	vec3 diffuse = spotLight.diffuse * diff * texel * intensity * attenuation;
+	vec3 specular = spotLight.specular * spec * texel * intensity * attenuation;
+	
+	return (ambient + diffuse + specular);
 
 }

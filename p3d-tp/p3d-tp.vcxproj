@@ -135,6 +135,7 @@
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="GLUtils.h" />
     <ClInclude Include="AmbientLight.h" />
+    <ClInclude Include="BaseLight.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
@@ -143,6 +144,7 @@
     <ClInclude Include="OmniLight.h" />
     <ClInclude Include="OrbitCamera.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="SpotLight.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="VertexBuffer.h" />

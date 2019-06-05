@@ -1,7 +1,9 @@
 #pragma once
 #include <glm/glm.hpp>
 
-class AmbientLight {
+#include "BaseLight.h"
+
+class AmbientLight : public BaseLight {
 
 public:
 
@@ -24,6 +26,7 @@ public:
 	void SetShader(Shader* shader) {
 
 		shader->use();
+		shader->setInt("ambLight.isActive", isActive);
 		shader->setVec3("ambLight.ambient", ambient);
 		shader->setFloat("ambLight.intensity", intensity);
 
