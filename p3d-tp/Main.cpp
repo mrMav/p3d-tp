@@ -12,9 +12,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#define OBJL_CONSOLE_OUTPUT
-#include "OBJ_Loader.h"
-
 #include "Texture2D.h"
 #include "Mesh.h"
 #include "VertexBuffer.h"
@@ -162,86 +159,10 @@ int main(void) {
 	Material material1{ "box-wood.png" };
 	material1.Ns = 8;
 	
-	/* load 3d model */
-	objl::Loader loader;
-
-	bool sucess = false;
-
 	std::string dir = "Iron_Man/";
 	std::string objname = "Iron_Man.obj";
-
-	// use the library to load the obj model
-	// we will need to then, build the model with
-	// our own structure
-	sucess = loader.LoadFile((dir + objname).c_str());
-
-	// our model variable
-	Model ironMan;
-
-	if (sucess) {
-
-		// if sucess, we can now build our own meshes
-		// lets build the meshes
-		for (int i = 0; i < loader.LoadedMeshes.size(); i++) {
-
-			std::vector<VertexPositionNormalTexture> vertices;
-			std::vector<unsigned int> indices;
-
-			// create an array of our own vertexPositionNormalTexture
-			for (int j = 0; j < loader.LoadedMeshes[i].Vertices.size(); j++) {
-
-				objl::Vertex _v = loader.LoadedMeshes[i].Vertices[j];
-
-				VertexPositionNormalTexture v{
-					glm::vec3(_v.Position.X, _v.Position.Y, _v.Position.Z),
-					glm::vec3(_v.Normal.X, _v.Normal.Y, _v.Normal.Z),
-					glm::vec2(_v.TextureCoordinate.X , _v.TextureCoordinate.Y)
-				};
-
-				vertices.push_back(v);
-
-			}
-
-			// we will now build an indices vector.
-			// the loaded indices are built in CCW
-			// but we are using CW winding in this application
-			for (int k = loader.LoadedMeshes[i].Indices.size() - 1; k >= 0; k--) {
-
-				indices.push_back(loader.LoadedMeshes[i].Indices[k]);
-
-			}
-
-			// the mesh
-			Mesh* m = new Mesh(vertices, indices);
-			m->model = glm::scale(m->model, glm::vec3(0.5f)); // scale it 
-			
-			// the loaded material
-			objl::Material lm = loader.LoadedMeshes[i].MeshMaterial;
-			
-			// our new material for this mesh
-			Material* mat = new Material((dir + lm.map_Kd).c_str());
-
-			mat->SetName(lm.name);
-
-			mat->Ka = glm::vec3(lm.Ka.X, lm.Ka.Y, lm.Ka.Z);
-			mat->Kd = glm::vec3(lm.Kd.X, lm.Kd.Y, lm.Kd.Z);
-			mat->Ks = glm::vec3(lm.Ks.X, lm.Ks.Y, lm.Ks.Z);
-			
-			mat->Ns = lm.Ns;
-
-			m->material = mat;
-			
-			ironMan.meshes.push_back(m);
-		}
-		
-	}
-	else {
-
-		printf("Loading error\n");
-		exit(-20);
-
-	}
-	
+	Model ironMan { dir, objname };
+	   	 		
 	/* Define a cube geometry and attributes */
 	std::vector<VertexPositionNormalTexture> vertices = {
 
