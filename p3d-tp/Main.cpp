@@ -30,25 +30,42 @@
 #include "OmniLight.h"
 #include "SpotLight.h"
 
+/* functions prototypes */
+
+// a callback to report errors in glfw
 void error_callback(int error, const char* description);
 
+// callback for when the window gets resized
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
+// function responsible for processing input
+// called on a game loop
 void process_input(GLFWwindow* window);
 
+// callback for when a key is hit
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
+// callback for mouse scroll
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
+// callback for mouse movement
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
+/* ****** */
+
+/* Global variables */
+
+// used to measure framerate
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-Viewport viewport = Viewport(800, 600);
+// a viewport object to store properties related to window and screen 
+Viewport viewport = Viewport(1260, 800);
+
+// the main camera
 OrbitCamera camera = OrbitCamera(&viewport, glm::vec3(0), 5.0f, 45.0f);
 
-/* cursor input properties*/
+// gameplay input properties 
 float lastX = viewport.Width() / 2;
 float lastY = viewport.Height() / 2;
 float mouseYaw = 0.0f;
@@ -57,62 +74,82 @@ bool firstMouse = true;
 bool isDragging = false;
 bool isEffectActive = false;
 
+// the four types of light used on the scene
 AmbientLight ambLight{ glm::vec3(0.2f), 1.0f };
 DirectionalLight dirLight{ glm::vec3(-5.0f), glm::vec3(0.3f), glm::vec3(1.0f), glm::vec3(1.0f) };
 OmniLight omniLight{ glm::vec3(0, 1, -0.8), glm::vec3(1, 0, 0) };
 SpotLight spotLight{ glm::vec3(0, 2, 0), glm::vec3(0.5, -1, 0) };
 
+/* ***** */
+
 int main(void) {
 
+	/* set up glfw */
+
+	// main window handle
 	GLFWwindow* window;
 
+	// set error callback
 	glfwSetErrorCallback(error_callback);
 
+	// init glfw
 	if (!glfwInit()) {
 
 		return -1;
 
 	}
 
+	// set gl version and profile
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+	// create the window
 	window = glfwCreateWindow(viewport.Width(), viewport.Height(), "P3D-TP", NULL, NULL);
 
+	// error handling in case we are not permitted to 
+	// create a window with a opengl context
 	if (!window) {
 
 		glfwTerminate();
 
-		return -1;
+		return -10;
 
 	}
 
 	glfwMakeContextCurrent(window);
+
+	// set the input mode
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-	// print opengl profile info
-	std::cout << glGetString(GL_VERSION) << " " << glGetString(GL_VENDOR) << " " << glGetString(GL_RENDERER) << std::endl;
-
-	/*
-		init glew, and set some state for rendering
-	*/
-
-	glewInit();
-
-	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_CULL_FACE); the iron man model is shitty, so we need to disable cooling
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CW);
-	glViewport(0, 0, viewport.Width(), viewport.Height());
+	// set callbacks:
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
+
+	// print opengl profile info
+	std::cout << glGetString(GL_VERSION) << " " << glGetString(GL_VENDOR) << " " << glGetString(GL_RENDERER) << std::endl;
+
+	/* ***** */
+
+	/* init glew, and set some state for rendering 	*/
+	glewInit();
+
+	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_CULL_FACE); // culling disabled for rendering. Otherwise, some faces of some models will have a weird look
+	//glCullFace(GL_BACK);
+	//glFrontFace(GL_CW);
+
+	// set the gl viewport
+	glViewport(0, 0, viewport.Width(), viewport.Height());
 	
-	Shader shader("Texture.vert", "Texture.frag");
-	
+	/* ***** */
+
+	/* build world */
+
+	// change some properties of the lights
 	spotLight.ambient = glm::vec3(0, 0, 0);
 	spotLight.diffuse = glm::vec3(0.2, 0.8, 0.2);
 	spotLight.specular = glm::vec3(0, 1.0, 0);
@@ -121,25 +158,29 @@ int main(void) {
 	spotLight.quadractic = 0.004;  // see https://learnopengl.com/Lighting/Light-casters
 	spotLight.isActive = 1;
 
+	// create a box material
 	Material material1{ "box-wood.png" };
+	material1.Ns = 8;
 	
-	Texture2D woodBoxTexture("box-wood.png");
-
 	/* load 3d model */
 	objl::Loader loader;
 
 	bool sucess = false;
+
 	std::string dir = "Iron_Man/";
 	std::string objname = "Iron_Man.obj";
+
+	// use the library to load the obj model
+	// we will need to then, build the model with
+	// our own structure
 	sucess = loader.LoadFile((dir + objname).c_str());
 
+	// our model variable
 	Model ironMan;
-	Mesh ironMesh;
-
 
 	if (sucess) {
 
-		// if sucess, we can now build our own meshes with 
+		// if sucess, we can now build our own meshes
 		// lets build the meshes
 		for (int i = 0; i < loader.LoadedMeshes.size(); i++) {
 
@@ -161,7 +202,7 @@ int main(void) {
 
 			}
 
-			// we will now build a indices vector.
+			// we will now build an indices vector.
 			// the loaded indices are built in CCW
 			// but we are using CW winding in this application
 			for (int k = loader.LoadedMeshes[i].Indices.size() - 1; k >= 0; k--) {
@@ -197,15 +238,14 @@ int main(void) {
 	else {
 
 		printf("Loading error\n");
-		exit(-10);
+		exit(-20);
 
 	}
-
-
-	/* Define a cube geometry and colors */
+	
+	/* Define a cube geometry and attributes */
 	std::vector<VertexPositionNormalTexture> vertices = {
 
-		// positions          // rgb colors
+		                            // positions         // normals       // uvs
 		// front face         
 		VertexPositionNormalTexture{-0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f},
 		VertexPositionNormalTexture{ 0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f},
@@ -272,11 +312,13 @@ int main(void) {
 
 	};
 
+	// we can create meshes whithout a model
 	Mesh cubeMesh { vertices, indices };
-	cubeMesh.material = &material1;
+	cubeMesh.material = &material1;  // set the material for the mesh rendering
 
 	cubeMesh.model *= glm::translate(glm::mat4(1.0f), glm::vec3(1, 0, 0));  // translates the cube a bit to the side
 
+	// initiate loop
 	while (!glfwWindowShouldClose(window)) {
 
 		process_input(window);
@@ -288,13 +330,15 @@ int main(void) {
 		glClearColor(0.1, 0.1, 0.1, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		// update camera logic
 		camera.Update(deltaTime);
 
+		// animate the cube a bit
 		cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(0.0f, 1.0f, 0.0f));
 		cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(1.0f, 0.0f, 0.0f));
 		cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(0.0f, 0.0f, 1.0f));
 
-		// update material properties
+		// update material properties of the iron man model
 		for (int i = 0; i < ironMan.meshes.size(); i++) {
 
 			ambLight.SetShader(ironMan.meshes[i]->material->shader);
@@ -308,6 +352,7 @@ int main(void) {
 
 		};
 		
+		// and for the cube
 		ambLight.SetShader(material1.shader);
 		dirLight.SetShader(material1.shader);
 		omniLight.SetShader(material1.shader);
@@ -316,15 +361,21 @@ int main(void) {
 		material1.shader->setInt("isEffectActive", isEffectActive ? 1 : 0);
 		material1.shader->setVec3("viewPos", camera.position);
 		
+		// send draw call
 		cubeMesh.Draw(camera.view_transform, camera.projection_transform, deltaTime);
+
+		// send another for the model (one per mesh, internal)
 		ironMan.Draw(camera.view_transform, camera.projection_transform, deltaTime);
 
+		// swap and poll
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
+	// clean up
 	glfwDestroyWindow(window);
 
+	// all good, bye
 	glfwTerminate();
 	return 0;
 
@@ -332,6 +383,8 @@ int main(void) {
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+
+	// set new viewport widths and heights
 
 	glViewport(0, 0, width, height);
 
@@ -348,6 +401,8 @@ void error_callback(int error, const char* description) {
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+	// handle various actions for key presses
+
 	if (key == GLFW_KEY_1 && action == GLFW_PRESS)
 		ambLight.isActive = !ambLight.isActive;
 	
@@ -367,6 +422,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 void process_input(GLFWwindow* window) {
 
+	// handle some keys down
+	// (only one for now)
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		
 		glfwSetWindowShouldClose(window, true);
@@ -376,6 +433,11 @@ void process_input(GLFWwindow* window) {
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+
+	// this function is mainly used for the camera, the only oject using he mouse.
+	// in more advanced usage, a mouse state class should be used
+
+	// here we pass the translation vector for the camera to process and if the user is dragging
 
 	if (firstMouse) {
 
@@ -402,6 +464,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 
 	}
 
+	// send data to camera
 	camera.ProcessMouseMovement(xoffset, yoffset, isDragging);
 
 }
