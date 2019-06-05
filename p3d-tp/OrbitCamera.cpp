@@ -78,7 +78,7 @@ void OrbitCamera::ProcessMouseMovement(float xoffset, float yoffset, bool isDrag
 
 		float translation_factor = 0.2f;
 
-		glm::vec4 translation = (glm::vec4{ xoffset * mouse_sensitivity, yoffset * mouse_sensitivity, 0.0f, 0.0f } * translation_factor) * view_transform;
+		glm::vec4 translation = (glm::vec4{ -xoffset * mouse_sensitivity, -yoffset * mouse_sensitivity, 0.0f, 0.0f } * translation_factor) * view_transform;
 
 		position += glm::vec3(translation);
 		target_target += glm::vec3(translation);
