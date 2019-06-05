@@ -20,4 +20,14 @@ public:
 
 	};
 
+
+	void SetShader(Shader* shader) {
+
+		shader->use();
+		shader->setVec3("ambLight.ambient", ambient);
+		shader->setFloat("ambLight.intensity", intensity);
+
+	}
+
+
 };

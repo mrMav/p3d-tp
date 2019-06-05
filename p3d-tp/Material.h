@@ -45,6 +45,7 @@ public:
 
 	// Getter name
 	std::string GetName() { return m_name; }
+	void SetName(std::string s) { m_name = s; }
 
 	// ambient color
 	glm::vec3 Ka;

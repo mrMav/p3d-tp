@@ -113,7 +113,9 @@ int main(void) {
 	objl::Loader loader;
 
 	bool sucess = false;
-	sucess = loader.LoadFile("Iron_Man/Iron_Man.obj");
+	std::string dir = "Iron_Man/";
+	std::string objname = "Iron_Man.obj";
+	sucess = loader.LoadFile((dir + objname).c_str());
 
 	Model ironMan;
 	Mesh ironMesh;
@@ -152,17 +154,29 @@ int main(void) {
 
 			}
 
+			// the mesh
 			Mesh* m = new Mesh(vertices, indices);
-			m->material = &material1;
-			m->model = glm::scale(m->model, glm::vec3(0.5f));
+			m->model = glm::scale(m->model, glm::vec3(0.5f)); // scale it 
+			
+			// the loaded material
+			objl::Material lm = loader.LoadedMeshes[i].MeshMaterial;
+			
+			// our new material for this mesh
+			Material* mat = new Material((dir + lm.map_Kd).c_str());
 
+			mat->SetName(lm.name);
+
+			mat->Ka = glm::vec3(lm.Ka.X, lm.Ka.Y, lm.Ka.Z);
+			mat->Kd = glm::vec3(lm.Kd.X, lm.Kd.Y, lm.Kd.Z);
+			mat->Ks = glm::vec3(lm.Ks.X, lm.Ks.Y, lm.Ks.Z);
+			
+			mat->Ns = lm.Ns;
+
+			m->material = mat;
+			
 			ironMan.meshes.push_back(m);
-
-			//ironMesh = { vertices, loader.LoadedMeshes[i].Indices };
-			//ironMesh.shader = &shader;
-
 		}
-
+		
 	}
 	else {
 
@@ -265,18 +279,20 @@ int main(void) {
 		cubeMesh.model = glm::rotate(cubeMesh.model, glm::radians(deltaTime * 1.5f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 		// update material properties
-		material1.shader->use();
 
-		material1.shader->setVec3("ambLight.ambient", ambLight.ambient);
-		material1.shader->setFloat("ambLight.intensity", ambLight.intensity);
+		for (int i = 0; i < ironMan.meshes.size(); i++) {
 
-		material1.shader->setVec3("dirLight.direction", dirLight.direction);
-		material1.shader->setVec3("dirLight.ambient", dirLight.ambient);
-		material1.shader->setVec3("dirLight.diffuse", dirLight.diffuse);
-		material1.shader->setVec3("dirLight.specular", dirLight.specular);
+			ambLight.SetShader(ironMan.meshes[i]->material->shader);
+			dirLight.SetShader(ironMan.meshes[i]->material->shader);
 
+			ironMan.meshes[i]->material->shader->setVec3("viewPos", camera.position);
+
+		};
+		
+		ambLight.SetShader(material1.shader);
+		dirLight.SetShader(material1.shader);
 		material1.shader->setVec3("viewPos", camera.position);
-
+		
 		cubeMesh.Draw(camera.view_transform, camera.projection_transform, deltaTime);
 		ironMan.Draw(camera.view_transform, camera.projection_transform, deltaTime);
 
