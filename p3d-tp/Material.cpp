@@ -34,7 +34,7 @@ void Material::Activate(glm::mat4 &model, glm::mat4 &view, glm::mat4 &projection
 	shader->setInt("material.diffuseMap", 0);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_diffuseMap->textureID);
+	m_diffuseMap->bind();
 
 	shader->setVec3("material.Ka", Ka);
 	shader->setVec3("material.Kd", Kd);

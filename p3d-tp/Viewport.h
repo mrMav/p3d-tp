@@ -1,5 +1,6 @@
 #pragma once
 
+// class for viewport data containing
 class Viewport {
 
 public:

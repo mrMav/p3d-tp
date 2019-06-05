@@ -9,12 +9,11 @@
 #include "Shader.h"
 #include "Mesh.h"
 
+// models are just containers for meshes
 class Model
 {
 public:
-
-	glm::mat4 model;
-
+	
 	std::vector<Mesh*> meshes;
 
 	Model();

@@ -3,6 +3,7 @@
 
 #include "BaseLight.h"
 
+// directional light data container
 class DirectionalLight : public BaseLight {
 
 public:

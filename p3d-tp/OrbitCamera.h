@@ -7,6 +7,7 @@
 
 #include "Viewport.h"
 
+// oritcamera to explore the scene
 class OrbitCamera
 {
 public:
@@ -16,8 +17,7 @@ public:
 	glm::vec3 position;
 	glm::vec3 target_target;
 	glm::vec3 target;
-
-	
+		
 	// these are the matrices to be used when this camera is active
 	glm::mat4 view_transform;
 	glm::mat4 projection_transform;

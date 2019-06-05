@@ -10,7 +10,9 @@
 
 #include "GLUtils.h"
 
-
+// a class for handling texture loading
+// this class will use the stb_image lib
+// to load the texture
 class Texture2D {
 
 public:

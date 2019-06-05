@@ -9,6 +9,9 @@
 #include "Shader.h"
 #include "Material.h"
 
+// a mesh class to hold a pair of vertexbuffer and indexbuffer
+// each mesh will have it's own material
+// mesh is the only renderable
 class Mesh
 {
 private:
@@ -20,8 +23,11 @@ private:
 
 
 public:
-
+	
+	// this mesh model matrix
 	glm::mat4 model;
+
+	// the material used when rendering
 	Material* material;
 
 	Mesh();

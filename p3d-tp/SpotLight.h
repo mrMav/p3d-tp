@@ -4,6 +4,7 @@
 #include "Shader.h"
 #include "BaseLight.h"
 
+// spot light data container
 class SpotLight : public BaseLight {
 
 public:

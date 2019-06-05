@@ -8,6 +8,7 @@
 #include "GLUtils.h"
 #include "VertexPositionNormalTexture.h"
 
+// class for vertex buffer abstraction
 class VertexBuffer
 {
 
@@ -18,6 +19,7 @@ private:
 	// will hold the data
 	// we will decompose the received data to an interleaved array
 	float* m_data;
+
 	int m_dataCount;
 
 public:

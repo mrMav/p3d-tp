@@ -3,6 +3,7 @@
 
 #include "BaseLight.h"
 
+// ambient light data container
 class AmbientLight : public BaseLight {
 
 public:
@@ -22,7 +23,7 @@ public:
 
 	};
 
-
+	// sets the uniforms in the provided shader
 	void SetShader(Shader* shader) {
 
 		shader->use();

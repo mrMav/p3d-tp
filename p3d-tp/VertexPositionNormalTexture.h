@@ -7,6 +7,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
 
+// handy struct mimic from Monogame
+// we will use this struct to represent a vertex using
+// a position, normal and uv
 struct VertexPositionNormalTexture {
 
 public:

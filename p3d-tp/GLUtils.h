@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 
+// static class for checking gl errors
 class GLUtils
 {
 

@@ -3,6 +3,7 @@
 
 #include "BaseLight.h"
 
+// omni light data container
 class OmniLight : public BaseLight {
 
 public:
