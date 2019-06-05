@@ -134,11 +134,13 @@
   <ItemGroup>
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="GLUtils.h" />
+    <ClInclude Include="AmbientLight.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="OBJ_Loader.h" />
+    <ClInclude Include="OmniLight.h" />
     <ClInclude Include="OrbitCamera.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />

@@ -1,6 +1,8 @@
 /*
 Shader inspiration and structure influence from:
 https://learnopengl.com/Lighting/Multiple-lights
+phong shading based on:
+https://en.wikipedia.org/wiki/Phong_reflection_model
 */
 
 #version 440 core
@@ -23,8 +25,10 @@ struct Mat {
 };
 
 struct AmbientLight {
-	
+
 	vec3 ambient;
+
+	float intensity;
 
 };
 
@@ -32,6 +36,7 @@ struct DirectionalLight {
 
     vec3 direction;
 
+	vec3 ambient;
     vec3 diffuse;
     vec3 specular;
 };
@@ -44,6 +49,7 @@ struct OmniLight {
     float linear;
     float quadratic;
 	
+	vec3 ambient;
     vec3 diffuse;
     vec3 specular;
 };
@@ -59,12 +65,13 @@ struct SpotLight {
     float linear;
     float quadratic;
   
+	vec3 ambient;
     vec3 diffuse;
     vec3 specular;       
 };
 
 uniform vec3 viewPos;
-//uniform AmbientLight ambientLight;
+uniform AmbientLight ambLight;
 uniform DirectionalLight dirLight;
 //uniform OmniLight omniLight;
 //uniform SpotLight spotLight;
@@ -87,10 +94,20 @@ void main() {
 	vec3 result = vec3(0);
 
 	// calculate the influence of the directional light
+	result += GetAmbientLightInfluence(ambLight);
 	result += GetDirectionalLightInfluence(dirLight, norm, viewDir);
 	
 	// output color
 	FragColor = vec4(result, 1.0);
+
+}
+
+/*
+simply returns the ambient color multiplied by an intensity
+*/
+vec3 GetAmbientLightInfluence(AmbientLight light) {
+	
+	return light.ambient * light.intensity * vec3(texture(material.diffuseMap, TexCoord));
 
 }
 
@@ -104,6 +121,8 @@ and camera position
 */
 vec3 GetDirectionalLightInfluence(DirectionalLight light, vec3 normal, vec3 viewDir)
 {
+	vec3 texel = vec3(texture(material.diffuseMap, TexCoord));
+
     vec3 lightDir = normalize(-light.direction);
     
 	// diffuse shading
@@ -114,9 +133,8 @@ vec3 GetDirectionalLightInfluence(DirectionalLight light, vec3 normal, vec3 view
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.Ns);
     
 	// combine results
-    //vec3 diffuse = light.diffuse * diff;
-    vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuseMap, TexCoord));
-    //vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuseMap, TexCoord));
+    vec3 ambient = light.ambient * texel;
+    vec3 diffuse = light.diffuse * diff * texel;
     vec3 specular = light.specular * spec * material.Ks;
-    return (diffuse + specular);
+    return (ambient + diffuse + specular);
 }

@@ -26,6 +26,7 @@
 #include "Model.h"
 #include "Material.h"
 #include "DirectionalLight.h"
+#include "AmbientLight.h"
 
 void error_callback(int error, const char* description);
 
@@ -102,7 +103,8 @@ int main(void) {
 
 	Shader shader("Texture.vert", "Texture.frag");
 	
-	DirectionalLight dirLight { glm::vec3(-5.0f, -5.0f, -5.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f)};
+	DirectionalLight dirLight{ glm::vec3(-5.0f), glm::vec3(0.3f), glm::vec3(1.0f), glm::vec3(1.0f) };
+	AmbientLight ambLight { glm::vec3(0.2f), 1.0f};
 	Material material1{ "box-wood.png" };
 	
 	Texture2D woodBoxTexture("box-wood.png");
@@ -243,6 +245,8 @@ int main(void) {
 	Mesh cubeMesh { vertices, indices };
 	cubeMesh.material = &material1;
 
+	cubeMesh.model *= glm::translate(glm::mat4(1.0f), glm::vec3(1, 0, 0));  // translates the cube a bit to the side
+
 	while (!glfwWindowShouldClose(window)) {
 
 		process_input(window);
@@ -262,7 +266,12 @@ int main(void) {
 
 		// update material properties
 		material1.shader->use();
+
+		material1.shader->setVec3("ambLight.ambient", ambLight.ambient);
+		material1.shader->setFloat("ambLight.intensity", ambLight.intensity);
+
 		material1.shader->setVec3("dirLight.direction", dirLight.direction);
+		material1.shader->setVec3("dirLight.ambient", dirLight.ambient);
 		material1.shader->setVec3("dirLight.diffuse", dirLight.diffuse);
 		material1.shader->setVec3("dirLight.specular", dirLight.specular);
 
