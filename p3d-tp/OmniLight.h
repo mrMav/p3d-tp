@@ -1,25 +1,53 @@
 #pragma once
 #include <glm/glm.hpp>
 
-class DirectionalLight {
+class OmniLight {
 
 public:
 
-	glm::vec3 direction;
+	glm::vec3 position;
 
+	float constant;
+	float linear;
+	float quadractic;
+
+	glm::vec3 ambient;
 	glm::vec3 diffuse;
 	glm::vec3 specular;
 
-	DirectionalLight(glm::vec3 dir, glm::vec3 diff, glm::vec3 spec) {
+	OmniLight(glm::vec3 pos, glm::vec3 diff) {
 
-		direction = dir;
-		diffuse = diff;
-		specular = spec;
+		position = pos;
+
+		ambient  = glm::vec3(0.1f);
+		diffuse  = diff;
+		specular = glm::vec3(1.0f);
+		
+		constant = 1.0f;
+		linear = 0.1f;
+		quadractic = 0.05;
 
 	};
 
-	~DirectionalLight() {
+	~OmniLight() {
 
 	};
+
+	void SetShader(Shader* shader) {
+
+		shader->use();
+		
+		shader->setVec3("omniLight.position", position);
+
+		shader->setVec3("omniLight.ambient", ambient);
+		shader->setVec3("omniLight.diffuse", diffuse);
+		shader->setVec3("omniLight.specular", specular);
+
+		shader->setFloat("omniLight.constant", constant);
+		shader->setFloat("omniLight.linear", linear);
+		shader->setFloat("omniLight.quadractic", quadractic);
+
+
+	}
 
 };

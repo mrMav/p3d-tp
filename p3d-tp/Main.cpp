@@ -27,6 +27,7 @@
 #include "Material.h"
 #include "DirectionalLight.h"
 #include "AmbientLight.h"
+#include "OmniLight.h"
 
 void error_callback(int error, const char* description);
 
@@ -103,8 +104,9 @@ int main(void) {
 
 	Shader shader("Texture.vert", "Texture.frag");
 	
+	AmbientLight ambLight{ glm::vec3(0.2f), 1.0f };
 	DirectionalLight dirLight{ glm::vec3(-5.0f), glm::vec3(0.3f), glm::vec3(1.0f), glm::vec3(1.0f) };
-	AmbientLight ambLight { glm::vec3(0.2f), 1.0f};
+	OmniLight omniLight { glm::vec3(0, 1, -0.8), glm::vec3(1, 0, 0) };
 	Material material1{ "box-wood.png" };
 	
 	Texture2D woodBoxTexture("box-wood.png");
@@ -284,6 +286,7 @@ int main(void) {
 
 			ambLight.SetShader(ironMan.meshes[i]->material->shader);
 			dirLight.SetShader(ironMan.meshes[i]->material->shader);
+			omniLight.SetShader(ironMan.meshes[i]->material->shader);
 
 			ironMan.meshes[i]->material->shader->setVec3("viewPos", camera.position);
 
@@ -291,6 +294,7 @@ int main(void) {
 		
 		ambLight.SetShader(material1.shader);
 		dirLight.SetShader(material1.shader);
+		omniLight.SetShader(material1.shader);
 		material1.shader->setVec3("viewPos", camera.position);
 		
 		cubeMesh.Draw(camera.view_transform, camera.projection_transform, deltaTime);
