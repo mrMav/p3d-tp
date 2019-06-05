@@ -8,6 +8,7 @@
 #include "Mesh.h"
 #include "Shader.h"
 
+// epty constructor for declarations
 Mesh::Mesh() {
 
 
@@ -23,6 +24,7 @@ Mesh::Mesh(std::vector<VertexPositionNormalTexture> vertices, std::vector<unsign
 	glBindVertexArray(m_vao);
 	GLUtils::CheckErrors();
 
+	// create buffers
 	m_vertexBuffer = new VertexBuffer(vertices);
 	m_indexBuffer = new IndexBuffer(indices);
 
@@ -41,6 +43,8 @@ Mesh::Mesh(std::vector<VertexPositionNormalTexture> vertices, std::vector<unsign
 
 	GLUtils::CheckErrors();
 
+	// aaand just because I'm superstitious, let's make sure the 
+	// model matrix starts out as an identity matrix
 	model = glm::mat4(1.0f);
 }
 
@@ -51,9 +55,10 @@ Mesh::~Mesh()
 
 void Mesh::Draw(glm::mat4 &view, glm::mat4 &projection, float deltaTime)
 {
-
+	// activate the material
 	material->Activate(model, view, projection, deltaTime);
 
+	// bind and draw call
 	glBindVertexArray(m_vao);
 	glDrawElements(GL_TRIANGLES, m_indexBuffer->GetDataCount(), GL_UNSIGNED_INT, 0);
 
