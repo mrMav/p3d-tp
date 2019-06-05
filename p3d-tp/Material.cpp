@@ -31,10 +31,15 @@ void Material::Activate(glm::mat4 &model, glm::mat4 &view, glm::mat4 &projection
 	shader->setMat4("view", view);
 	shader->setMat4("projection", projection);
 
-	shader->setVec3("mat.Ka", Ka);
-	shader->setVec3("mat.Kd", Kd);
-	shader->setVec3("mat.Ks", Ks);
-	shader->setFloat("mat.Ns", Ns);
+	shader->setInt("material.diffuseMap", 0);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_diffuseMap->textureID);
+
+	shader->setVec3("material.Ka", Ka);
+	shader->setVec3("material.Kd", Kd);
+	shader->setVec3("material.Ks", Ks);
+	shader->setFloat("material.Ns", Ns);
 
 
 }

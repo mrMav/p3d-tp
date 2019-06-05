@@ -84,11 +84,11 @@ void main() {
     vec3 viewDir = normalize(viewPos - FragPos);
 
 	// the resulting color
-	vec3 result;
+	vec3 result = vec3(0);
 
 	// calculate the influence of the directional light
 	result += GetDirectionalLightInfluence(dirLight, norm, viewDir);
-
+	
 	// output color
 	FragColor = vec4(result, 1.0);
 
@@ -114,7 +114,9 @@ vec3 GetDirectionalLightInfluence(DirectionalLight light, vec3 normal, vec3 view
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.Ns);
     
 	// combine results
+    //vec3 diffuse = light.diffuse * diff;
     vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuseMap, TexCoord));
+    //vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuseMap, TexCoord));
     vec3 specular = light.specular * spec * material.Ks;
     return (diffuse + specular);
 }

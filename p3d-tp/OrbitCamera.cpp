@@ -79,7 +79,7 @@ void OrbitCamera::ProcessMouseMovement(float xoffset, float yoffset, bool constr
 		if (pitch < -89.0f) pitch = -89.0f;
 	}
 
-	printf("Position: %s, Pitch: %f, Yaw: %f\n", glm::to_string(position).c_str(), xoffset, yoffset);
+	// printf("Position: %s, Pitch: %f, Yaw: %f\n", glm::to_string(position).c_str(), xoffset, yoffset);
 
 }
 

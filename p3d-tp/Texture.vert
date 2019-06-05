@@ -28,6 +28,6 @@ void main()
 	TexCoord = a_uv;
     
 	// output position
-    gl_Position = projection * view * vec4(FragPos, 1.0);
+    gl_Position = projection * view * model * vec4(a_position, 1.0);
 
 }

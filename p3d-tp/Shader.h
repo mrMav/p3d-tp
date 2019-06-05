@@ -135,6 +135,13 @@ public:
 
 	}
 
+	void setInt(const std::string &name, const int value) {
+
+		glUniform1i(glGetUniformLocation(program, name.c_str()), value);
+		GLUtils::CheckErrors();
+
+	}
+
 	void setFloat(const std::string &name, const float value) {
 
 		glUniform1f(glGetUniformLocation(program, name.c_str()), value);

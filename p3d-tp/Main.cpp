@@ -89,7 +89,7 @@ int main(void) {
 	glewInit();
 
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE); the iron man model is shitty, so we need to disable cooling
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CW);
 	glViewport(0, 0, viewport.Width(), viewport.Height());
@@ -101,7 +101,7 @@ int main(void) {
 
 	Shader shader("Texture.vert", "Texture.frag");
 	
-	DirectionalLight dirLight { glm::vec3(-5.0f, -5.0f, -5.0f), glm::vec3(1.0f, 0.8f, 0.9f), glm::vec3(1.0f)};
+	DirectionalLight dirLight { glm::vec3(-5.0f, -5.0f, -5.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f)};
 	Material material1{ "box-wood.png" };
 	
 	Texture2D woodBoxTexture("box-wood.png");
